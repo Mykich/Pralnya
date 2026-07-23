@@ -1,0 +1,626 @@
+2026-05-20 13:18:38,629 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-20 13:26:31,467 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-20 15:30:29,218 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-20 15:31:32,396 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-20 15:37:10,177 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 09:47:04,023 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 09:54:54,541 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 10:18:24,479 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 10:21:19,831 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 10:31:49,204 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 10:43:16,332 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 10:54:34,650 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 11:06:06,210 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 11:48:50,510 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 11:57:15,841 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 12:04:41,524 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 12:19:39,511 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 12:21:27,114 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 12:33:24,185 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 12:34:43,501 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 12:49:43,889 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 13:08:08,750 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 13:13:09,154 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 13:16:41,519 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 13:48:00,972 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 14:31:54,478 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 14:44:03,388 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 15:08:12,297 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 16:28:54,421 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-21 16:55:30,140 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 09:29:26,905 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 09:37:24,078 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 10:00:09,753 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 10:05:06,279 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 10:08:10,225 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 10:23:34,750 - ERROR - Помилка відправки статусу клієнту
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 2416, in notify_completed_orders
+    await bot.send_message(
+    ...<7 lines>...
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\client\bot.py", line 2928, in send_message
+    return await self(call, request_timeout=request_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\client\bot.py", line 493, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\client\session\base.py", line 259, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\client\session\aiohttp.py", line 177, in make_request
+    response = self.check_response(
+        bot=bot,
+    ...<2 lines>...
+        content=raw_result,
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\client\session\base.py", line 129, in check_response
+    raise TelegramForbiddenError(method=method, message=description)
+aiogram.exceptions.TelegramForbiddenError: Telegram server says - Forbidden: user is deactivated
+2026-05-22 10:28:37,941 - ERROR - Помилка відправки статусу клієнту
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 2416, in notify_completed_orders
+    await bot.send_message(
+    ...<7 lines>...
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\client\bot.py", line 2928, in send_message
+    return await self(call, request_timeout=request_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\client\bot.py", line 493, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\client\session\base.py", line 259, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\client\session\aiohttp.py", line 177, in make_request
+    response = self.check_response(
+        bot=bot,
+    ...<2 lines>...
+        content=raw_result,
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\client\session\base.py", line 129, in check_response
+    raise TelegramForbiddenError(method=method, message=description)
+aiogram.exceptions.TelegramForbiddenError: Telegram server says - Forbidden: user is deactivated
+2026-05-22 10:55:06,027 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 10:56:28,110 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 11:08:14,961 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 11:14:30,960 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 11:22:55,779 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 13:16:54,694 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 13:25:50,201 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 13:36:28,685 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 13:37:06,020 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 13:47:58,436 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 13:52:23,660 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 15:46:15,709 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 15:52:24,827 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 15:57:22,048 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 16:00:24,767 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-22 16:03:34,393 - ERROR - Помилка під час обрахунку статистики
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 712, in show_statistics_menu
+    await message.answer(text, reply_markup=statistics_menu)
+                                            ^^^^^^^^^^^^^^^
+NameError: name 'statistics_menu' is not defined. Did you mean: 'show_statistics_menu'?
+2026-05-22 16:03:41,008 - ERROR - Помилка під час обрахунку статистики
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 712, in show_statistics_menu
+    await message.answer(text, reply_markup=statistics_menu)
+                                            ^^^^^^^^^^^^^^^
+NameError: name 'statistics_menu' is not defined. Did you mean: 'show_statistics_menu'?
+2026-05-22 16:35:06,478 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-25 10:09:27,659 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-25 10:13:24,278 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-25 10:16:26,065 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-25 10:20:20,292 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-25 10:28:06,164 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-25 10:33:37,499 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-25 11:54:10,412 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-25 12:17:01,909 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-25 12:24:09,588 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-26 14:30:52,699 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-26 14:52:14,461 - ERROR - Cause exception while process update id=842550998 by bot id=7779234071
+NameError: name 'cancel_order_kb' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\fsm\middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 183, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 1326, in cmd_start
+    reply_markup=cancel_order_kb,
+                 ^^^^^^^^^^^^^^^
+NameError: name 'cancel_order_kb' is not defined
+2026-05-26 14:53:17,649 - ERROR - Cause exception while process update id=842551001 by bot id=7779234071
+NameError: name 'cancel_order_kb' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\fsm\middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 183, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 1326, in cmd_start
+    reply_markup=cancel_order_kb,
+                 ^^^^^^^^^^^^^^^
+NameError: name 'cancel_order_kb' is not defined
+2026-05-26 14:55:36,371 - ERROR - Cause exception while process update id=842551002 by bot id=7779234071
+NameError: name 'cancel_order_kb' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\fsm\middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 183, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 1326, in cmd_start
+    reply_markup=cancel_order_kb,
+                 ^^^^^^^^^^^^^^^
+NameError: name 'cancel_order_kb' is not defined
+2026-05-26 14:59:31,112 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-26 15:00:07,232 - ERROR - Cause exception while process update id=842551003 by bot id=7779234071
+NameError: name 'cancel_order_kb' is not defined
+Traceback (most recent call last):
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 320, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 164, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 27, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 58, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\fsm\middleware.py", line 43, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 283, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 163, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 155, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\router.py", line 183, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 126, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 71, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 1326, in cmd_start
+    reply_markup=cancel_order_kb,
+                 ^^^^^^^^^^^^^^^
+NameError: name 'cancel_order_kb' is not defined
+2026-05-26 15:04:28,034 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-26 15:08:05,327 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-26 15:16:19,896 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-27 14:58:44,904 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-27 15:33:13,243 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-28 12:23:00,693 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-28 13:01:59,606 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-28 13:12:35,720 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-28 14:06:35,362 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-28 14:13:22,781 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-28 15:23:13,465 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-28 15:28:32,399 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-28 15:46:54,998 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 09:55:12,801 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 09:57:09,787 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 10:05:23,718 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 10:24:15,007 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 10:48:04,071 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 10:54:52,096 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 10:58:59,423 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 11:00:56,365 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 11:16:52,649 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 12:52:32,594 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 12:58:22,224 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 13:00:18,126 - ERROR - Помилка Gemini
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 3252, in chat_with_gemini
+    response = gemini_model.generate_content(message.text)
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\generativeai\generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+        request,
+        **request_options,
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\ai\generativelanguage_v1beta\services\generative_service\client.py", line 835, in generate_content
+    response = rpc(
+        request,
+    ...<2 lines>...
+        metadata=metadata,
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\retry\retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\retry\retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+        exc,
+    ...<6 lines>...
+        timeout,
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\retry\retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\retry\retry_unary.py", line 147, in retry_target
+    result = target()
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-2.5-flash
+Please retry in 43.761512122s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 5
+}
+, retry_delay {
+  seconds: 43
+}
+]
+2026-05-29 13:00:51,017 - ERROR - Помилка Gemini
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 3252, in chat_with_gemini
+    response = gemini_model.generate_content(message.text)
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\generativeai\generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+        request,
+        **request_options,
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\ai\generativelanguage_v1beta\services\generative_service\client.py", line 835, in generate_content
+    response = rpc(
+        request,
+    ...<2 lines>...
+        metadata=metadata,
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\gapic_v1\method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\retry\retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\retry\retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+        exc,
+    ...<6 lines>...
+        timeout,
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\retry\retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\retry\retry_unary.py", line 147, in retry_target
+    result = target()
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\google\api_core\grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 5, model: gemini-2.5-flash
+Please retry in 10.87987912s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.5-flash"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+  quota_value: 5
+}
+, retry_delay {
+  seconds: 10
+}
+]
+2026-05-29 13:12:49,309 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 13:17:52,358 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 13:25:07,503 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 13:30:41,174 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 13:32:27,617 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 13:48:31,279 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 13:54:57,039 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-05-29 14:09:59,418 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 10:16:11,893 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 10:27:03,957 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 10:33:42,294 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 10:37:16,745 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 11:18:28,398 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 11:20:00,817 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 13:17:36,073 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 13:36:52,995 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 13:45:34,169 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 14:29:15,316 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 15:01:12,426 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 16:07:41,242 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-06-01 16:10:00,281 - ERROR - Помилка підписки
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 2892, in confirm_subscription
+    exp_index = headers.index("subscription_expires")
+ValueError: list.index(x): x not in list
+2026-06-01 16:14:07,739 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-07-22 12:43:34,776 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-07-22 13:51:02,969 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-07-22 15:12:15,559 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-07-22 15:12:54,474 - ERROR - Gemini full traceback
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 400, in generate_gemini_response
+    asyncio.to_thread(gemini_model.generate_content, prompt),
+                      ^^^^^^^^^^^^
+NameError: name 'gemini_model' is not defined
+2026-07-22 15:12:56,496 - ERROR - Gemini full traceback
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 400, in generate_gemini_response
+    asyncio.to_thread(gemini_model.generate_content, prompt),
+                      ^^^^^^^^^^^^
+NameError: name 'gemini_model' is not defined
+2026-07-22 15:12:58,504 - ERROR - Gemini full traceback
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 400, in generate_gemini_response
+    asyncio.to_thread(gemini_model.generate_content, prompt),
+                      ^^^^^^^^^^^^
+NameError: name 'gemini_model' is not defined
+2026-07-22 15:19:18,374 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-07-23 09:43:25,329 - ERROR - Помилка перевірки статусів консультацій
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 1944, in check_consultation_statuses
+    atelier_rows = atelier_sheet.get_all_values()[1:]
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\worksheet.py", line 486, in get_all_values
+    return self.get_values(
+           ~~~~~~~~~~~~~~~^
+        range_name=range_name,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        return_type=return_type,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\worksheet.py", line 463, in get_values
+    return self.get(
+           ~~~~~~~~^
+        range_name=range_name,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        return_type=return_type,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\worksheet.py", line 958, in get
+    response = self.client.values_get(
+        self.spreadsheet_id, get_range_name, params=params
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\http_client.py", line 236, in values_get
+    r = self.request("get", url, params=params)
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\http_client.py", line 128, in request
+    raise APIError(response)
+gspread.exceptions.APIError: APIError: [503]: The service is currently unavailable.
+2026-07-23 09:43:25,340 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2026-07-23 09:46:31,120 - ERROR - Помилка при перевірці статусів
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 3387, in notify_completed_orders
+    orders = sheet.get_all_values()
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\worksheet.py", line 486, in get_all_values
+    return self.get_values(
+           ~~~~~~~~~~~~~~~^
+        range_name=range_name,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        return_type=return_type,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\worksheet.py", line 463, in get_values
+    return self.get(
+           ~~~~~~~~^
+        range_name=range_name,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        return_type=return_type,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\worksheet.py", line 958, in get
+    response = self.client.values_get(
+        self.spreadsheet_id, get_range_name, params=params
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\http_client.py", line 236, in values_get
+    r = self.request("get", url, params=params)
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\http_client.py", line 128, in request
+    raise APIError(response)
+gspread.exceptions.APIError: APIError: [503]: The service is currently unavailable.
+2026-07-23 09:48:43,899 - ERROR - Помилка перевірки статусів консультацій
+Traceback (most recent call last):
+  File "C:\Laundry\Пральня\Телеграмм-бот\PralnyaVdoma.py", line 1944, in check_consultation_statuses
+    atelier_rows = atelier_sheet.get_all_values()[1:]
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\worksheet.py", line 486, in get_all_values
+    return self.get_values(
+           ~~~~~~~~~~~~~~~^
+        range_name=range_name,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        return_type=return_type,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\worksheet.py", line 463, in get_values
+    return self.get(
+           ~~~~~~~~^
+        range_name=range_name,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        return_type=return_type,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\worksheet.py", line 958, in get
+    response = self.client.values_get(
+        self.spreadsheet_id, get_range_name, params=params
+    )
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\http_client.py", line 236, in values_get
+    r = self.request("get", url, params=params)
+  File "C:\Users\Ігорь\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\gspread\http_client.py", line 128, in request
+    raise APIError(response)
+gspread.exceptions.APIError: APIError: [500]: Internal error encountered.
+2026-07-23 09:48:43,902 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - Request timeout error
+2026-07-23 11:01:12,055 - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
