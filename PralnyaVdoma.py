@@ -1,5 +1,6 @@
 import asyncio
 import os
+from fastapi.middleware.cors import CORSMiddleware
 import google.generativeai as genai
 import logging
 import traceback
