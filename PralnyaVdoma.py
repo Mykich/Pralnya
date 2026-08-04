@@ -4,6 +4,9 @@ import google.generativeai as genai
 import logging
 import traceback
 import re
+import os
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from aiogram import Bot, Dispatcher, F
 from aiogram.enums import ParseMode
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
@@ -249,7 +252,21 @@ ITEM_ALIASES = {
     "дрібний ремонт": ["дрібний ремонт", "мелкий ремонт", "невеликий ремонт"],
 }
 # --- новое старт ---
+# --- Заглушка сервера для Render ---
+class DummyHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
+        self.wfile.write(b"PralnyaVdoma Bot is running!")
 
+def run_dummy_server():
+    port = int(os.environ.get("PORT", 10000))
+    server = HTTPServer(('0.0.0.0', port), DummyHandler)
+    server.serve_forever()
+# ------------------------------------
+
+# --- новое старт ---
 
 def normalize_phone(phone):
     """Оставляет только цифры номера телефона"""
@@ -1728,12 +1745,11 @@ async def cmd_start(message: Message, command: CommandObject, state: FSMContext)
             reply_markup=admin_kb,
         )
     else:
-        welcome_text = get_config_value("welcome_text") or (
-            "👋 <b>Доброго дня!</b>\n\n"
-            "Ви у сервісі <b>Pralnya Vdoma</b> — пральні та ательє поруч із домом.\n\n"
-            "Ми можемо забрати речі з квартири, дбайливо випрати або очистити, "
-            "відпрасувати, а також допомогти з ремонтом чи підгонкою одягу.\n\n"
-            "Оберіть потрібну послугу в меню нижче."
+        welcome_text = (
+            "👋 <b>Ласкаво просимо до Pralnya Vdoma</b>\n\n"
+            "Персональний догляд за речами у вашому ЖK.\n"
+            "Заберемо, делікатно очистимо, попрасуємо та повернемо — без зайвих турбот.\n\n"
+            "Оберіть послугу в меню — про решту подбаємо ми."
         )
         await message.answer(welcome_text, reply_markup=main_menu)
 
@@ -3659,7 +3675,8 @@ async def main():
     asyncio.create_task(periodic_notify())
     asyncio.create_task(check_consultation_statuses(bot))
     await dp.start_polling(bot)
-
+    
+threading.Thread(target=run_dummy_server, daemon=True).start()
 
 if __name__ == "__main__":
     asyncio.run(main())
