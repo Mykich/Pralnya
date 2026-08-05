@@ -28,6 +28,7 @@ from aiogram.types import ReplyKeyboardRemove
 from datetime import datetime, timedelta
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from collections import Counter
+from api import app
 
 ADMIN_IDS = [987895270]
 
@@ -254,21 +255,7 @@ ITEM_ALIASES = {
     "дрібний ремонт": ["дрібний ремонт", "мелкий ремонт", "невеликий ремонт"],
 }
 
-app = FastAPI()
 
-# Список адресов, которым разрешено делать запросы к вашему API
-origins = [
-    "https://mykich.github.io",
-]
-
-# Настройка CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 # --- новое старт ---
 # --- Заглушка сервера для Render 
