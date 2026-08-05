@@ -28,7 +28,6 @@ from aiogram.types import ReplyKeyboardRemove
 from datetime import datetime, timedelta
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from collections import Counter
-from api import app
 
 ADMIN_IDS = [987895270]
 
