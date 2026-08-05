@@ -7,6 +7,7 @@ import logging
 import traceback
 import re
 import threading
+import uvicorn
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from aiogram import Bot, Dispatcher, F
 from aiogram.enums import ParseMode
@@ -270,13 +271,13 @@ app.add_middleware(
 )
 
 # --- новое старт ---
-# --- Заглушка сервера для Render ---
-class DummyHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/plain')
-        self.end_headers()
-        self.wfile.write(b"PralnyaVdoma Bot is running!")
+# --- Заглушка сервера для Render 
+# ---class DummyHandler(BaseHTTPRequestHandler):
+    # ---def do_GET(self):
+        # ---self.send_response(200)
+       # ---self.send_header('Content-type', 'text/plain')
+       # ---self.end_headers()
+        # ---self.wfile.write(b"PralnyaVdoma Bot is running!")
 
 def run_dummy_server():
     port = int(os.environ.get("PORT", 10000))
@@ -3690,11 +3691,21 @@ async def periodic_notify():
 
 async def main():
     print("✅ Бот запущен!")
+    
+    # Ваши фоновые задачи
     asyncio.create_task(periodic_notify())
     asyncio.create_task(check_consultation_statuses(bot))
-    await dp.start_polling(bot)
     
-threading.Thread(target=run_dummy_server, daemon=True).start()
+    # Настраиваем FastAPI-сервер uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    config = uvicorn.Config(app=app, host="0.0.0.0", port=port, log_level="info")
+    server = uvicorn.Server(config)
+
+    # Запускаем одновременно FastAPI и Telegram-бота
+    await asyncio.gather(
+        server.serve(),
+        dp.start_polling(bot)
+    )
 
 if __name__ == "__main__":
     asyncio.run(main())
