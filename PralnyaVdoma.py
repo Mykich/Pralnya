@@ -1,33 +1,33 @@
 import asyncio
 import os
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-import google.generativeai as genai
 import logging
 import traceback
 import re
-import threading
+from datetime import datetime, timedelta
+from collections import Counter
+
+# FastAPI & Uvicorn
 import uvicorn
-from http.server import BaseHTTPRequestHandler, HTTPServer
-from aiogram import Bot, Dispatcher, F
-from aiogram.enums import ParseMode
-from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
-from aiogram.client.session.aiohttp import AiohttpSession
-from aiogram.client.default import DefaultBotProperties
-from aiogram.filters import CommandStart, CommandObject
-from aiogram.fsm.state import State, StatesGroup, any_state
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm.storage.memory import MemoryStorage
-from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+
+# AI & Google Sheets
+import google.generativeai as genai
 import gspread
 from gspread.exceptions import WorksheetNotFound
 from oauth2client.service_account import ServiceAccountCredentials
-from datetime import datetime, timedelta
-from aiogram.filters import Command
-from aiogram.types import ReplyKeyboardRemove
-from datetime import datetime, timedelta
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from collections import Counter
+from dotenv import load_dotenv
+
+# Aiogram
+from aiogram import Bot, Dispatcher, F
+from aiogram.enums import ParseMode
+from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardRemove
+from aiogram.client.session.aiohttp import AiohttpSession
+from aiogram.client.default import DefaultBotProperties
+from aiogram.filters import CommandStart, CommandObject, Command
+from aiogram.fsm.state import State, StatesGroup, any_state
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.storage.memory import MemoryStorage
 
 ADMIN_IDS = [987895270]
 
