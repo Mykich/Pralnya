@@ -1,11 +1,11 @@
 import asyncio
 import os
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import google.generativeai as genai
 import logging
 import traceback
 import re
-import os
 import threading
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from aiogram import Bot, Dispatcher, F
@@ -252,6 +252,23 @@ ITEM_ALIASES = {
     ],
     "дрібний ремонт": ["дрібний ремонт", "мелкий ремонт", "невеликий ремонт"],
 }
+
+app = FastAPI()
+
+# Список адресов, которым разрешено делать запросы к вашему API
+origins = [
+    "https://mykich.github.io",
+]
+
+# Настройка CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # --- новое старт ---
 # --- Заглушка сервера для Render ---
 class DummyHandler(BaseHTTPRequestHandler):
