@@ -28,6 +28,78 @@ from aiogram.types import ReplyKeyboardRemove
 from datetime import datetime, timedelta
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from collections import Counter
+app = FastAPI()
+
+origins = [
+    "https://mykich.github.io",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# --- 1. GET: Загрузка кабинета ---
+@app.get("/api/cabinet")
+async def get_cabinet(user_id: int):
+    try:
+        user_str_id = str(user_id)
+        client_data = {"name": "", "phone": "", "apartment": "", "discount": 0}
+        
+        # 1. Ищем данные клиента
+        all_clients = sheet_clients.get_all_records()
+        for row in all_clients:
+            if str(row.get("telegram_id", "")) == user_str_id:
+                client_data = {
+                    "name": row.get("name", ""),
+                    "phone": str(row.get("phone", "")),
+                    "apartment": str(row.get("apartment", "")),
+                    "discount": 0
+                }
+                break
+        
+        client_orders = []
+        
+        # 2. Собираем заказы ПРАЧЕЧНОЙ
+        all_orders = sheet_orders.get_all_records()
+        for row in all_orders:
+            order_tg_id = str(row.get("telegram_id", "")) 
+            order_phone = str(row.get("Телефон", ""))
+            
+            if order_tg_id == user_str_id or (client_data["phone"] and order_phone == client_data["phone"]):
+                client_orders.append({
+                    "id": str(row.get("Номер замовлення", "")),
+                    "status": row.get("Статус", "Прийнято"),
+                    "items": str(row.get("Речі", "")),
+                    "date": str(row.get("Дата", "")),
+                    "price": format_price(row.get("Сума", "")),
+                    "type": "laundry" # Добавили тип, чтобы JS понимал, что это прачечная
+                })
+                
+        # 3. Собираем заявки АТЕЛЬЕ
+        all_atelier = sheet_atelier.get_all_records()
+        for row in all_atelier:
+            # Ищем по колонке "Telegram ID", как ты назвал ее в листе Atelier
+            order_tg_id = str(row.get("Telegram ID", ""))
+            
+            if order_tg_id == user_str_id:
+                client_orders.append({
+                    "id": str(row.get("Номер заявки", "")),
+                    "status": row.get("Статус", "⏳ Очікує огляду"),
+                    "items": str(row.get("Опис", "")),
+                    "date": str(row.get("Дата", "")),
+                    "price": "Після огляду",
+                    "type": "atelier" # Эта метка поможет нам на фронтенде вывести иконку ножниц
+                })
+        
+        return {"client": client_data, "orders": client_orders}
+        
+    except Exception as e:
+        print(f"❌ Ошибка при получении данных: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 ADMIN_IDS = [987895270]
 
