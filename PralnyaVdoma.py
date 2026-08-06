@@ -559,6 +559,8 @@ sheet = spreadsheet.sheet1
 atelier_sheet = spreadsheet.worksheet("Atelier")
 b2b_sheet = spreadsheet.worksheet("B2B")
 
+sheet_clients = spreadsheet.worksheet("Clients")
+sheet_orders = spreadsheet.worksheet("Лист1")
 
 
 session = AiohttpSession()
