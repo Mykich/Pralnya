@@ -1,6 +1,6 @@
 import asyncio
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import google.generativeai as genai
 import logging
@@ -558,6 +558,8 @@ spreadsheet = client_gsheets.open("Pralnya")
 sheet = spreadsheet.sheet1
 atelier_sheet = spreadsheet.worksheet("Atelier")
 b2b_sheet = spreadsheet.worksheet("B2B")
+
+
 
 session = AiohttpSession()
 bot = Bot(
