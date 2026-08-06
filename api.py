@@ -105,6 +105,32 @@ class AIMessageData(BaseModel):
     
 router = APIRouter()
 
+def format_price(val):
+    if not val:
+        return "0 грн"
+    
+    # 1. Очищаем строку от неразрывных пробелов и меняем запятые на точки
+    clean_str = str(val).replace('\xa0', '').replace(' ', '').strip()
+    clean_str = clean_str.replace(',', '.')
+    clean_str = clean_str.replace('грн', '').replace('₴', '').strip()
+    
+    try:
+        num = float(clean_str)
+        
+        # 2. Если сумма гигантская и круглая (например, 35000.0), 
+        # значит она пришла в копейках. Переводим в гривны:
+        if num >= 10000 and num % 100 == 0:
+            num = num / 100
+            
+        # 3. САМОЕ ВАЖНОЕ: Оборачиваем в int(), чтобы отсечь нули после точки.
+        # Теперь вместо "350.00" мы отдаем строго "350 грн".
+        # JS на фронтенде больше не сможет "склеить" нули!
+        return f"{int(num)} грн"
+    
+    except ValueError:
+        # Если пришел совсем странный текст, который нельзя превратить в число
+        return str(val) if "грн" in str(val) else f"{val} грн"
+
 # --- 1. GET: Загрузка кабинета ---
 @app.get("/api/cabinet")
 async def get_cabinet(user_id: int):
@@ -428,31 +454,7 @@ async def create_b2b_request(data: B2BData):
         print(f"❌ Помилка створення B2B заявки: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-def format_price(val):
-    if not val:
-        return "0 грн"
-    
-    # 1. Очищаем строку от неразрывных пробелов и меняем запятые на точки
-    clean_str = str(val).replace('\xa0', '').replace(' ', '').strip()
-    clean_str = clean_str.replace(',', '.')
-    clean_str = clean_str.replace('грн', '').replace('₴', '').strip()
-    
-    try:
-        num = float(clean_str)
-        
-        # 2. Если сумма гигантская и круглая (например, 35000.0), 
-        # значит она пришла в копейках. Переводим в гривны:
-        if num >= 10000 and num % 100 == 0:
-            num = num / 100
-            
-        # 3. САМОЕ ВАЖНОЕ: Оборачиваем в int(), чтобы отсечь нули после точки.
-        # Теперь вместо "350.00" мы отдаем строго "350 грн".
-        # JS на фронтенде больше не сможет "склеить" нули!
-        return f"{int(num)} грн"
-    
-    except ValueError:
-        # Если пришел совсем странный текст, который нельзя превратить в число
-        return str(val) if "грн" in str(val) else f"{val} грн"
+
 
 # --- 5. POST: AI Чат Консультант ---
 @app.post("/api/ai")
@@ -480,6 +482,16 @@ async def ai_chat(data: AIMessageData):
         raise HTTPException(status_code=500, detail=str(e))
 
 import os
+
+import asyncio
+# Импортируем твоего бота и диспетчер из соседнего файла
+from PralnyaVdoma import bot, dp
+
+@app.on_event("startup")
+async def on_startup():
+    print("🚀 Запускаем FastAPI и Телеграм-бота одновременно!")
+    # Запускаем поллинг бота в фоновом режиме
+    asyncio.create_task(dp.start_polling(bot))
 
 if __name__ == "__main__":
     # Render сам выдает нужный порт
