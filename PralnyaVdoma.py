@@ -41,7 +41,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+@app.get("/")
+async def root():
+    return {"status": "ok", "message": "Pralnya Vdoma API is running"}
 ADMIN_IDS = [987895270]
 
 ORDER_STATUSES = [
