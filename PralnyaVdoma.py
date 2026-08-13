@@ -8,7 +8,6 @@ import traceback
 import re
 import threading
 import uvicorn
-from http.server import BaseHTTPRequestHandler, HTTPServer
 from aiogram import Bot, Dispatcher, F
 from aiogram.enums import ParseMode
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
@@ -41,7 +40,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 async def root():
     return {"status": "ok", "message": "Pralnya Vdoma API is running"}
 ADMIN_IDS = [987895270]
@@ -269,24 +268,6 @@ ITEM_ALIASES = {
     "дрібний ремонт": ["дрібний ремонт", "мелкий ремонт", "невеликий ремонт"],
 }
 
-
-
-# --- новое старт ---
-# --- Заглушка сервера для Render 
-# ---class DummyHandler(BaseHTTPRequestHandler):
-    # ---def do_GET(self):
-        # ---self.send_response(200)
-       # ---self.send_header('Content-type', 'text/plain')
-       # ---self.end_headers()
-        # ---self.wfile.write(b"PralnyaVdoma Bot is running!")
-
-def run_dummy_server():
-    port = int(os.environ.get("PORT", 10000))
-    server = HTTPServer(('0.0.0.0', port), DummyHandler)
-    server.serve_forever()
-# ------------------------------------
-
-# --- новое старт ---
 
 def normalize_phone(phone):
     """Оставляет только цифры номера телефона"""
@@ -3694,6 +3675,25 @@ async def periodic_notify():
         await asyncio.sleep(300)  # каждые 5 минут
 
 
+async def run_bot_with_restart():
+    """
+    Polling з автоматичним самовідновленням. Раніше polling і веб-сервер
+    були запущені разом через asyncio.gather() — якщо polling падав
+    (обрив мережі, конфлікт getUpdates при передеплої на Render тощо),
+    виняток гасив ОБИДВІ задачі, і процес завершувався цілком. Render
+    міг не піднімати його одразу сам, тому й доводилось рестартити руками.
+    Тепер збій у polling просто логується і повторюється — веб-сервер
+    (на який ходить АптаймБот) при цьому й не помічає, що щось було.
+    """
+    while True:
+        try:
+            await dp.start_polling(bot)
+        except Exception as e:
+            logging.error(f"⚠️ Бот (polling) впав, перезапускаю через 5 секунд: {e}")
+            logging.error(traceback.format_exc())
+            await asyncio.sleep(5)
+
+
 async def main():
     print("✅ Бот запущен!")
     
@@ -3701,16 +3701,15 @@ async def main():
     asyncio.create_task(periodic_notify())
     asyncio.create_task(check_consultation_statuses(bot))
     
-    # Настраиваем FastAPI-сервер uvicorn
+    # Настраиваем FastAPI-сервер uvicorn — саме він тримає порт живим для Render/АптаймБот
     port = int(os.environ.get("PORT", 8000))
     config = uvicorn.Config(app=app, host="0.0.0.0", port=port, log_level="info")
     server = uvicorn.Server(config)
 
-    # Запускаем одновременно FastAPI и Telegram-бота
-    await asyncio.gather(
-        server.serve(),
-        dp.start_polling(bot)
-    )
+    # Бот запускається окремою задачею з самовідновленням, а не gather() —
+    # щоб його падіння не тягнуло за собою веб-сервер (і навпаки)
+    asyncio.create_task(run_bot_with_restart())
+    await server.serve()
 
 if __name__ == "__main__":
     asyncio.run(main())
