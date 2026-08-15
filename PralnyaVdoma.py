@@ -3430,14 +3430,6 @@ async def notify_completed_orders():
         order_number_index = headers.index("Номер замовлення")
         date_index = headers.index("Дата")
 
-        status_messages = {
-            "Очікує": "⏳ Ваше замовлення очікує обробки.",
-            "🧺 В роботі": "🧺 Ваше замовлення вже в роботі.",
-            "🚚 Доставляється": "🚚 Ваше замовлення вже доставляється.",
-            "✅ Виконано": "✅ Ваше замовлення виконано! Можете забрати його або очікуйте доставку 🧺",
-            "❌ Скасовано": "❌ Ваше замовлення скасовано.",
-        }
-
         client_sheet = client_gsheets.open("Pralnya").worksheet("Clients")
         clients = client_sheet.get_all_records()
 
@@ -3680,6 +3672,85 @@ async def chat_with_gemini(message: Message, state: FSMContext):
         )
 
 
+async def send_winback_messages():
+    """
+    Раз на добу перевіряє клієнтів, які давно не робили замовлень (30+ днів),
+    і надсилає їм тепле нагадування. НЕ обіцяє конкретний відсоток знижки в тексті —
+    щоб не розійтися з реальною програмою Pralnya Club (яка рахується в api.py
+    від суми витрат) — натомість спрямовує клієнта в кабінет, де цифра завжди актуальна.
+    Не спамить повторно — дата останнього win-back повідомлення зберігається в Clients.
+    """
+    try:
+        orders = sheet_orders.get_all_records()
+        clients = sheet_clients.get_all_records()
+        headers = sheet_clients.row_values(1)
+
+        # Остання дата замовлення для кожного telegram_id
+        last_order_date = {}
+        for row in orders:
+            tg_id = str(row.get("telegram_id", "")).strip()
+            date_str = str(row.get("Дата", "")).strip()
+            if not tg_id or not date_str:
+                continue
+            try:
+                order_date = datetime.strptime(date_str, "%Y-%m-%d")
+            except ValueError:
+                continue
+            if tg_id not in last_order_date or order_date > last_order_date[tg_id]:
+                last_order_date[tg_id] = order_date
+
+        # Додаємо колонку для дати win-back, якщо її ще нема
+        if "Останній winback" not in headers:
+            sheet_clients.update_cell(1, len(headers) + 1, "Останній winback")
+            winback_col_index = len(headers) + 1
+        else:
+            winback_col_index = headers.index("Останній winback") + 1
+
+        now = datetime.now()
+        INACTIVE_DAYS = 30
+        WINBACK_COOLDOWN_DAYS = 30
+
+        for i, client_row in enumerate(clients, start=2):  # рядок 1 — заголовки
+            tg_id = str(client_row.get("telegram_id", "")).strip()
+            if not tg_id or tg_id not in last_order_date:
+                continue  # ще жодного замовлення — не наш кейс для winback
+
+            days_since_order = (now - last_order_date[tg_id]).days
+            if days_since_order < INACTIVE_DAYS:
+                continue
+
+            last_winback_str = str(client_row.get("Останній winback", "")).strip()
+            if last_winback_str:
+                try:
+                    last_winback_date = datetime.strptime(last_winback_str, "%Y-%m-%d")
+                    if (now - last_winback_date).days < WINBACK_COOLDOWN_DAYS:
+                        continue  # вже надсилали нещодавно
+                except ValueError:
+                    pass
+
+            try:
+                await bot.send_message(
+                    tg_id,
+                    "💙 <b>Давно вас не було!</b>\n\n"
+                    "Скучили за вами. Оформіть нове замовлення прямо в застосунку — "
+                    "і загляньте в «Кабінет», там завжди видно вашу актуальну знижку Pralnya Club 🧺",
+                )
+                sheet_clients.update_cell(i, winback_col_index, now.strftime("%Y-%m-%d"))
+                await asyncio.sleep(0.2)
+            except Exception as e:
+                logging.error(f"Не вдалося надіслати winback {tg_id}: {e}")
+
+    except Exception as e:
+        logging.error("Помилка send_winback_messages", exc_info=True)
+        print(f"❌ Помилка winback: {e}")
+
+
+async def periodic_winback():
+    while True:
+        await send_winback_messages()
+        await asyncio.sleep(86400)  # раз на добу
+
+
 async def periodic_notify():
     while True:
         await notify_completed_orders()
@@ -3711,6 +3782,7 @@ async def main():
     # Ваши фоновые задачи
     asyncio.create_task(periodic_notify())
     asyncio.create_task(check_consultation_statuses(bot))
+    asyncio.create_task(periodic_winback())
     
     # Настраиваем FastAPI-сервер uvicorn — саме він тримає порт живим для Render/АптаймБот
     port = int(os.environ.get("PORT", 8000))
