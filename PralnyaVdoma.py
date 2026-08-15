@@ -3414,6 +3414,20 @@ async def user_orders(message: Message, state: FSMContext):
         logging.error("Помилка при отриманні історії", exc_info=True)
 
 
+def get_or_create_column(worksheet, headers, column_name):
+    """
+    Повертає 0-based індекс колонки за назвою. Якщо такої колонки в таблиці
+    ще нема — сама дописує заголовок і повертає індекс нового стовпця,
+    замість того щоб впасти з ValueError і мовчки нічого не робити.
+    """
+    if column_name in headers:
+        return headers.index(column_name)
+    new_index = len(headers)
+    worksheet.update_cell(1, new_index + 1, column_name)
+    headers.append(column_name)
+    return new_index
+
+
 async def notify_completed_orders():
     try:
         orders = sheet.get_all_values()
@@ -3424,11 +3438,22 @@ async def notify_completed_orders():
         headers = orders[0]
         rows = orders[1:]
 
-        phone_index = headers.index("Телефон")
-        status_index = headers.index("Статус")
-        last_notified_status_index = headers.index("Останній повідомлений статус")
-        order_number_index = headers.index("Номер замовлення")
-        date_index = headers.index("Дата")
+        headers_before_creation = list(headers)
+
+        phone_index = get_or_create_column(sheet, headers, "Телефон")
+        status_index = get_or_create_column(sheet, headers, "Статус")
+        last_notified_status_index = get_or_create_column(sheet, headers, "Останній повідомлений статус")
+        order_number_index = get_or_create_column(sheet, headers, "Номер замовлення")
+        date_index = get_or_create_column(sheet, headers, "Дата")
+
+        if "Останній повідомлений статус" not in headers_before_creation:
+            # Колонку щойно створили — заповнюємо її поточними статусами заднім числом,
+            # щоб не розіслати клієнтам "нове" повідомлення по всіх старих замовленнях одразу.
+            # Стежити за реальними змінами статусу почнемо з наступного циклу (через 5 хв).
+            for idx, row in enumerate(rows, start=2):
+                if len(row) > status_index and row[status_index].strip():
+                    sheet.update_cell(idx, last_notified_status_index + 1, row[status_index].strip())
+            return
 
         client_sheet = client_gsheets.open("Pralnya").worksheet("Clients")
         clients = client_sheet.get_all_records()
