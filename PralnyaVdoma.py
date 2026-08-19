@@ -492,7 +492,8 @@ spreadsheet = client_gsheets.open("Pralnya")
 
 sheet = spreadsheet.sheet1
 atelier_sheet = spreadsheet.worksheet("Atelier")
-b2b_sheet = spreadsheet.worksheet("B2B")
+# Переключаем подключение на новый общий лист
+b2b_sheet = spreadsheet.worksheet("B2B_General")
 
 sheet_clients = spreadsheet.worksheet("Clients")
 sheet_orders = spreadsheet.worksheet("Лист1")
@@ -1910,37 +1911,43 @@ async def handle_b2b_consultation(message: Message, state: FSMContext):
     request_number = generate_consultation_number("B2B")
 
     text = message.text or message.caption or "Фото без опису"
+    photo_file_id = message.photo[-1].file_id if message.photo else ""
 
     admin_text = (
-        "🏢 <b>Нова B2B-заявка</b>\n\n"
+        "🏢 <b>Нова B2B-заявка (Бот)</b>\n\n"
         f"🆔 Заявка: <b>{request_number}</b>\n"
         f"👤 Клієнт: <b>{name}</b>\n"
         f"🆔 Telegram ID: <code>{telegram_id}</code>\n"
         f"🔗 Username: {username}\n\n"
         f"💬 Опис:\n{text}"
     )
-    photo_file_id = message.photo[-1].file_id if message.photo else ""
+
+    # Формируем ровно 12 элементов под структуру B2B_General
+    row_data = [
+        datetime.now().strftime("%d.%m.%Y %H:%M"),  # 1. Дата
+        "Бот",                                      # 2. Джерело
+        request_number,                             # 3. Номер заявки
+        name,                                       # 4. Клієнт (Ім'я)
+        "",                                         # 5. Телефон (если не собираем на этом шаге)
+        text,                                       # 6. Опис / Деталі
+        photo_file_id,                              # 7. Фото
+        str(telegram_id),                           # 8. Telegram ID
+        username,                                   # 9. Username
+        "Нова заявка",                              # 10. Статус
+        "",                                         # 11. Коментар адміна
+        ""                                          # 12. Останній повідомлений статус
+    ]
 
     try:
         b2b_sheet.append_row(
-            [
-                datetime.now().strftime("%d.%m.%Y %H:%M"),
-                name,
-                telegram_id,
-                username,
-                text,
-                photo_file_id,
-                "Нова",
-                "",
-                "Нова",
-                request_number,
-            ],
+            row_data,
             value_input_option="USER_ENTERED",
         )
-        print("✅ B2B-заявка записана в лист B2B")
+        print("✅ B2B-заявка записана в лист B2B_General")
     except Exception as e:
-        print(f"❌ Помилка запису B2B-заявки в лист B2B: {e}")
-        logging.error("Помилка запису B2B-заявки в лист B2B", exc_info=True)
+        print(f"❌ Помилка запису B2B-заявки в лист B2B_General: {e}")
+        logging.error("Помилка запису B2B-заявки в лист B2B_General", exc_info=True)
+
     for admin_id in ADMIN_IDS:
         try:
             if message.photo:
