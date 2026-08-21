@@ -492,7 +492,8 @@ spreadsheet = client_gsheets.open("Pralnya")
 
 sheet = spreadsheet.sheet1
 atelier_sheet = spreadsheet.worksheet("Atelier")
-b2b_sheet = spreadsheet.worksheet("B2B")
+# Переключаем подключение на новый общий лист
+b2b_sheet = spreadsheet.worksheet("B2B_General")
 
 sheet_clients = spreadsheet.worksheet("Clients")
 sheet_orders = spreadsheet.worksheet("Лист1")
@@ -1910,37 +1911,43 @@ async def handle_b2b_consultation(message: Message, state: FSMContext):
     request_number = generate_consultation_number("B2B")
 
     text = message.text or message.caption or "Фото без опису"
+    photo_file_id = message.photo[-1].file_id if message.photo else ""
 
     admin_text = (
-        "🏢 <b>Нова B2B-заявка</b>\n\n"
+        "🏢 <b>Нова B2B-заявка (Бот)</b>\n\n"
         f"🆔 Заявка: <b>{request_number}</b>\n"
         f"👤 Клієнт: <b>{name}</b>\n"
         f"🆔 Telegram ID: <code>{telegram_id}</code>\n"
         f"🔗 Username: {username}\n\n"
         f"💬 Опис:\n{text}"
     )
-    photo_file_id = message.photo[-1].file_id if message.photo else ""
+
+    # Формируем ровно 12 элементов под структуру B2B_General
+    row_data = [
+        datetime.now().strftime("%d.%m.%Y %H:%M"),  # 1. Дата
+        "Бот",                                      # 2. Джерело
+        request_number,                             # 3. Номер заявки
+        name,                                       # 4. Клієнт (Ім'я)
+        "",                                         # 5. Телефон (если не собираем на этом шаге)
+        text,                                       # 6. Опис / Деталі
+        photo_file_id,                              # 7. Фото
+        str(telegram_id),                           # 8. Telegram ID
+        username,                                   # 9. Username
+        "Нова заявка",                              # 10. Статус
+        "",                                         # 11. Коментар адміна
+        ""                                          # 12. Останній повідомлений статус
+    ]
 
     try:
         b2b_sheet.append_row(
-            [
-                datetime.now().strftime("%d.%m.%Y %H:%M"),
-                name,
-                telegram_id,
-                username,
-                text,
-                photo_file_id,
-                "Нова",
-                "",
-                "Нова",
-                request_number,
-            ],
+            row_data,
             value_input_option="USER_ENTERED",
         )
-        print("✅ B2B-заявка записана в лист B2B")
+        print("✅ B2B-заявка записана в лист B2B_General")
     except Exception as e:
-        print(f"❌ Помилка запису B2B-заявки в лист B2B: {e}")
-        logging.error("Помилка запису B2B-заявки в лист B2B", exc_info=True)
+        print(f"❌ Помилка запису B2B-заявки в лист B2B_General: {e}")
+        logging.error("Помилка запису B2B-заявки в лист B2B_General", exc_info=True)
+
     for admin_id in ADMIN_IDS:
         try:
             if message.photo:
@@ -1972,6 +1979,9 @@ async def handle_b2b_consultation(message: Message, state: FSMContext):
 
 
 async def check_consultation_statuses(bot: Bot):
+    # Пауза перед першим проходом: даємо uvicorn встигнути прив'язатися до порту
+    # і відповісти на перевірку Render, перш ніж лізти в синхронний (блокуючий) Google Sheets.
+    await asyncio.sleep(25)
     while True:
         try:
             # 🧵 Перевірка заявок Ательє
@@ -3754,12 +3764,15 @@ async def send_winback_messages():
 
 
 async def periodic_winback():
+    # Пауза перед першим проходом — з усіх фонових задач ця найважча (сканує і Clients, і Лист1)
+    await asyncio.sleep(35)
     while True:
         await send_winback_messages()
         await asyncio.sleep(86400)  # раз на добу
 
 
 async def periodic_notify():
+    await asyncio.sleep(15)
     while True:
         await notify_completed_orders()
         await asyncio.sleep(300)  # каждые 5 минут
