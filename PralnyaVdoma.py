@@ -2021,16 +2021,19 @@ async def check_consultation_statuses(bot: Bot):
             b2b_rows = b2b_sheet.get_all_values()[1:]
 
             for index, row in enumerate(b2b_rows, start=2):
-                telegram_id = row[2] if len(row) > 2 else ""
-                description = row[4] if len(row) > 4 else "—"
-                status = row[6] if len(row) > 6 and row[6] else "Нова"
-                admin_comment = row[7] if len(row) > 7 and row[7] else ""
-                last_notified_status = row[8] if len(row) > 8 else ""
-                request_number = row[9] if len(row) > 9 and row[9] else "—"
+    # Защита от коротких строк (gspread обрезает пустые ячейки в конце списка)
+                while len(row) < 12:
+                    row.append("")
+
+                    request_number = row[2] if row[2] else "—"
+                    description = row[5] if row[5] else "—"
+                    telegram_id = row[7]
+                    status = row[9] if row[9] else "Нова заявка"
+                    admin_comment = row[10]
+                    last_notified_status = row[11]
 
                 if not telegram_id or status == last_notified_status:
                     continue
-
                 try:
                     await bot.send_message(
                         int(telegram_id),
