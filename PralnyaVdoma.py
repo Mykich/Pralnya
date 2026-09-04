@@ -2021,12 +2021,14 @@ async def check_consultation_statuses(bot: Bot):
             b2b_rows = b2b_sheet.get_all_values()[1:]
 
             for index, row in enumerate(b2b_rows, start=2):
-                telegram_id = row[2] if len(row) > 2 else ""
-                description = row[4] if len(row) > 4 else "—"
-                status = row[6] if len(row) > 6 and row[6] else "Нова"
-                admin_comment = row[7] if len(row) > 7 and row[7] else ""
-                last_notified_status = row[8] if len(row) > 8 else ""
-                request_number = row[9] if len(row) > 9 and row[9] else "—"
+                # Реальна структура B2B_General: Дата,Джерело,Номер заявки,Клієнт,Телефон,
+                # Опис,Фото,Telegram ID,Username,Статус,Коментар адміна,Останній повідомлений статус
+                request_number = row[2] if len(row) > 2 and row[2] else "—"
+                description = row[5] if len(row) > 5 else "—"
+                telegram_id = row[7] if len(row) > 7 else ""
+                status = row[9] if len(row) > 9 and row[9] else "Нова заявка"
+                admin_comment = row[10] if len(row) > 10 and row[10] else ""
+                last_notified_status = row[11] if len(row) > 11 else ""
 
                 if not telegram_id or status == last_notified_status:
                     continue
@@ -2041,7 +2043,7 @@ async def check_consultation_statuses(bot: Bot):
                         f"📝 Коментар: {admin_comment or '—'}",
                     )
 
-                    b2b_sheet.update_cell(index, 9, status)
+                    b2b_sheet.update_cell(index, 12, status)
                     print(f"✅ Клієнта повідомлено по B2B-заявці, рядок {index}")
 
                 except Exception as e:
@@ -2092,6 +2094,7 @@ async def global_cancel(message: Message, state: FSMContext):
         order_number,  # M — Номер замовлення
         "",
         recognized_table_text,  # N — Останній повідомлений статус
+        str(message.from_user.id),  # P — telegram_id
     ]
 
     try:
@@ -2611,6 +2614,7 @@ async def confirm_order(message: Message, state: FSMContext):
                 order_number,
                 "",
                 recognized_table_text,
+                str(message.from_user.id),
             ]
         )
 
@@ -2723,6 +2727,7 @@ async def confirm_order_auto_phone(message: Message, state: FSMContext):
         order_number,
         "",  # 12: Номер замовлення
         recognized_table_text,  # 13: Розпізнано
+        str(message.from_user.id),  # 14: telegram_id
     ]
 
     try:
