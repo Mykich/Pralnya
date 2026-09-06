@@ -25,7 +25,7 @@ from datetime import datetime, timedelta
 from aiogram.filters import Command
 from aiogram.types import ReplyKeyboardRemove
 from datetime import datetime, timedelta
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from collections import Counter
 app = FastAPI()
 
@@ -3515,6 +3515,31 @@ async def notify_completed_orders():
 
                 print(f"🔔 Клієнту {phone} надіслано статус: {status}")
 
+                # Після "Виконано" — окремим повідомленням просимо оцінити замовлення
+                if status == "✅ Виконано":
+                    rating_keyboard = InlineKeyboardMarkup(
+                        inline_keyboard=[
+                            [
+                                InlineKeyboardButton(
+                                    text="⭐" * n, callback_data=f"rate_{order_number}_{n}"
+                                )
+                                for n in range(1, 6)
+                            ]
+                        ]
+                    )
+                    try:
+                        await bot.send_message(
+                            chat_id=int(telegram_id),
+                            text=(
+                                "💙 Дякуємо, що обрали Pralnya Vdoma!\n\n"
+                                "Як вам якість обслуговування? Оберіть оцінку нижче:"
+                            ),
+                            reply_markup=rating_keyboard,
+                        )
+                    except Exception as e:
+                        print(f"❌ Не вдалося надіслати запит на оцінку для {phone}: {e}")
+                        logging.error("Помилка запиту оцінки", exc_info=True)
+
             except Exception as e:
                 print(f"❌ Помилка відправки статусу для {phone}: {e}")
                 logging.error("Помилка відправки статусу клієнту", exc_info=True)
@@ -3522,6 +3547,41 @@ async def notify_completed_orders():
     except Exception as e:
         print(f"❌ Помилка при перевірці статусів: {e}")
         logging.error("Помилка при перевірці статусів", exc_info=True)
+
+
+@dp.callback_query(F.data.startswith("rate_"))
+async def handle_order_rating(callback: CallbackQuery):
+    try:
+        _, order_number, rating_str = callback.data.split("_", 2)
+        rating = int(rating_str)
+
+        records = sheet.get_all_values()
+        headers = records[0]
+        rating_index = get_or_create_column(sheet, headers, "Рейтинг")
+        order_number_index = headers.index("Номер замовлення")
+
+        found_row = None
+        for idx, row in enumerate(records[1:], start=2):
+            if len(row) > order_number_index and row[order_number_index] == order_number:
+                found_row = idx
+                break
+
+        if found_row:
+            sheet.update_cell(found_row, rating_index + 1, rating)
+            await callback.message.edit_text(
+                f"{'⭐' * rating}\n\nДякуємо за вашу оцінку! 💙"
+            )
+        else:
+            await callback.message.edit_text(
+                "Не вдалося знайти це замовлення — можливо, воно вже застаріло."
+            )
+
+        await callback.answer()
+
+    except Exception as e:
+        print(f"❌ Помилка збереження рейтингу: {e}")
+        logging.error("Помилка збереження рейтингу", exc_info=True)
+        await callback.answer("Сталася помилка, спробуйте пізніше.", show_alert=True)
 
 
 @dp.message(F.text == "👤 Особистий кабінет", any_state)
