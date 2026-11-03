@@ -8,6 +8,7 @@ import traceback
 import re
 import threading
 import uvicorn
+from aiogram.exceptions import TelegramBadRequest, TelegramForbiddenError
 from aiogram import Bot, Dispatcher, F
 from aiogram.enums import ParseMode
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
@@ -2010,6 +2011,14 @@ async def check_consultation_statuses(bot: Bot):
 
                     atelier_sheet.update_cell(index, 9, status)
                     print(f"✅ Клієнта повідомлено по заявці Ательє, рядок {index}")
+                except (TelegramBadRequest, TelegramForbiddenError, ValueError) as e:
+                    # Чат не існує / бота заблоковано / некоректний ID —
+                    # повторювати марно, фіксуємо статус, щоб цикл не крутився
+                    logging.warning(f"Atelier: не доставлено, рядок {index}: {e}")
+                    try:
+                        atelier_sheet.update_cell(index, 9, status)
+                    except Exception:
+                        logging.error("Не вдалося зафіксувати статус Atelier", exc_info=True)
 
                 except Exception as e:
                     print(
@@ -2045,6 +2054,14 @@ async def check_consultation_statuses(bot: Bot):
 
                     b2b_sheet.update_cell(index, 12, status)
                     print(f"✅ Клієнта повідомлено по B2B-заявці, рядок {index}")
+
+                except (TelegramBadRequest, TelegramForbiddenError, ValueError) as e:
+                    logging.warning(f"B2B: не доставлено, рядок {index}: {e}")
+                    try:
+                        b2b_sheet.update_cell(index, 12, status)
+                    except Exception:
+                        logging.error("Не вдалося зафіксувати статус B2B", exc_info=True)
+
 
                 except Exception as e:
                     print(f"❌ Не вдалося повідомити клієнта B2B, рядок {index}: {e}")
