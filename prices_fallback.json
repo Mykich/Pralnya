@@ -1,0 +1,1119 @@
+{
+  "version": "2026-11-25",
+  "currency": "UAH",
+  "note": "Ціни вказані за стандартний виріб. Остаточна вартість залежить від матеріалу, розміру, стану речі, плям, декору та складності обробки. Перед початком роботи ми погоджуємо вартість із клієнтом.",
+  "sections": [
+    {
+      "key": "clothing",
+      "title": "Прання одягу"
+    },
+    {
+      "key": "outerwear",
+      "title": "Верхній одяг"
+    },
+    {
+      "key": "textile",
+      "title": "Домашній текстиль"
+    },
+    {
+      "key": "shoes",
+      "title": "Взуття"
+    },
+    {
+      "key": "accessories",
+      "title": "Аксесуари"
+    },
+    {
+      "key": "aquaclean",
+      "title": "Аквачистка (преміум)"
+    },
+    {
+      "key": "ironing",
+      "title": "Прасування без прання"
+    },
+    {
+      "key": "extra",
+      "title": "Додаткові послуги"
+    },
+    {
+      "key": "atelier",
+      "title": "Ательє"
+    }
+  ],
+  "items": [
+    {
+      "id": 1,
+      "section": "clothing",
+      "name": "Футболка",
+      "description": "Прання та професійне сушіння",
+      "price": 200,
+      "unit": "шт",
+      "image": "images/services/tshirt.png",
+      "aliases": [
+        "футболка",
+        "футболки",
+        "футболочку",
+        "футболку"
+      ]
+    },
+    {
+      "id": 2,
+      "section": "clothing",
+      "name": "Майка",
+      "description": "Прання та професійне сушіння",
+      "price": 180,
+      "unit": "шт",
+      "image": "images/services/tanktop.png",
+      "aliases": [
+        "майка",
+        "майки"
+      ]
+    },
+    {
+      "id": 3,
+      "section": "clothing",
+      "name": "Сорочка",
+      "description": "Прання та прасування",
+      "price": 250,
+      "unit": "шт",
+      "image": "images/services/shirt.png",
+      "aliases": [
+        "сорочка",
+        "сорочки",
+        "сорочку",
+        "рубашка",
+        "рубашки",
+        "рубаха",
+        "рубашку"
+      ]
+    },
+    {
+      "id": 4,
+      "section": "clothing",
+      "name": "Блуза",
+      "description": "Делікатне прання",
+      "price": 240,
+      "unit": "шт",
+      "image": "images/services/blouse.png",
+      "aliases": [
+        "блуза",
+        "блузка",
+        "блузку",
+        "блузи"
+      ]
+    },
+    {
+      "id": 5,
+      "section": "clothing",
+      "name": "Светр",
+      "description": "Делікатне прання",
+      "price": 300,
+      "unit": "шт",
+      "image": "images/services/sweater.png",
+      "aliases": [
+        "светр",
+        "свитер",
+        "джемпер"
+      ]
+    },
+    {
+      "id": 6,
+      "section": "clothing",
+      "name": "Худі",
+      "description": "Прання та сушіння",
+      "price": 320,
+      "unit": "шт",
+      "image": "images/services/hoodie.png",
+      "aliases": [
+        "худі",
+        "худи"
+      ]
+    },
+    {
+      "id": 7,
+      "section": "clothing",
+      "name": "Джинси",
+      "description": "Прання та прасування",
+      "price": 280,
+      "unit": "шт",
+      "image": "images/services/jeans.png",
+      "aliases": [
+        "джинси",
+        "джинсы",
+        "джинс"
+      ]
+    },
+    {
+      "id": 8,
+      "section": "clothing",
+      "name": "Брюки",
+      "description": "Прання та прасування",
+      "price": 280,
+      "unit": "шт",
+      "image": "images/services/trousers.png",
+      "aliases": [
+        "штани",
+        "штані",
+        "брюки",
+        "брюк",
+        "брючки",
+        "пара штанів",
+        "пара брюк",
+        "штаны"
+      ]
+    },
+    {
+      "id": 9,
+      "section": "clothing",
+      "name": "Спідниця",
+      "description": "Делікатне прання",
+      "price": 240,
+      "unit": "шт",
+      "image": "images/services/skirt.png",
+      "aliases": [
+        "спідниця",
+        "спідницю",
+        "спідниці",
+        "юбка",
+        "юбку",
+        "юбки"
+      ]
+    },
+    {
+      "id": 10,
+      "section": "clothing",
+      "name": "Сукня",
+      "description": "Преміум догляд",
+      "price": 400,
+      "unit": "шт",
+      "image": "images/services/dress.png",
+      "aliases": [
+        "сукня",
+        "сукні",
+        "платье",
+        "сукню",
+        "платья",
+        "платьице"
+      ]
+    },
+    {
+      "id": 11,
+      "section": "clothing",
+      "name": "Шорти",
+      "description": "Прання та сушіння",
+      "price": 180,
+      "unit": "шт",
+      "image": "images/services/shorts.png",
+      "aliases": [
+        "шорти",
+        "шорты"
+      ]
+    },
+    {
+      "id": 12,
+      "section": "clothing",
+      "name": "Світшот",
+      "description": "Прання та сушіння",
+      "price": 320,
+      "unit": "шт",
+      "image": "images/services/sweatshirt.png",
+      "aliases": [
+        "світшот",
+        "свитшот"
+      ]
+    },
+    {
+      "id": 13,
+      "section": "clothing",
+      "name": "Кофта",
+      "description": "Делікатне прання",
+      "price": 300,
+      "unit": "шт",
+      "image": "images/services/cardigan.png",
+      "aliases": [
+        "кофта",
+        "кофту",
+        "кофты",
+        "кофти"
+      ]
+    },
+    {
+      "id": 101,
+      "section": "outerwear",
+      "name": "Вітровка",
+      "description": "Професійне очищення",
+      "price": 480,
+      "unit": "шт",
+      "image": "images/services/windbreaker.png",
+      "aliases": [
+        "вітровка",
+        "вітровку",
+        "ветровка",
+        "ветровку"
+      ]
+    },
+    {
+      "id": 102,
+      "section": "outerwear",
+      "name": "Куртка демісезонна",
+      "description": "Прання та сушіння",
+      "price": 550,
+      "unit": "шт",
+      "image": "images/services/jacket.png",
+      "aliases": [
+        "куртка",
+        "куртки",
+        "куртку",
+        "курточка",
+        "курточки",
+        "курточку",
+        "демісезонна куртка",
+        "куртка демісезонна",
+        "демисезонная куртка"
+      ]
+    },
+    {
+      "id": 103,
+      "section": "outerwear",
+      "name": "Пальто текстильне",
+      "description": "Делікатна чистка",
+      "price": 1000,
+      "unit": "шт",
+      "image": "images/services/coat.png",
+      "aliases": [
+        "пальто",
+        "текстильне пальто",
+        "текстильное пальто",
+        "пальто текстильное"
+      ]
+    },
+    {
+      "id": 104,
+      "section": "outerwear",
+      "name": "Пуховик короткий",
+      "description": "Аквачистка та відновлення пуху",
+      "price": 850,
+      "unit": "шт",
+      "image": "images/services/down-short.png",
+      "aliases": [
+        "короткий пуховик",
+        "пуховик короткий"
+      ]
+    },
+    {
+      "id": 105,
+      "section": "outerwear",
+      "name": "Пуховик довгий",
+      "description": "Аквачистка та відновлення пуху",
+      "price": 990,
+      "unit": "шт",
+      "image": "images/services/down-long.png",
+      "aliases": [
+        "довгий пуховик",
+        "длинный пуховик",
+        "пуховик довгий",
+        "пуховик длинный",
+        "пуховик",
+        "пуховики",
+        "пуховика",
+        "пухова куртка",
+        "пуховая куртка",
+        "пуфер"
+      ]
+    },
+    {
+      "id": 106,
+      "section": "outerwear",
+      "name": "Куртка джинсова",
+      "description": "Професійне очищення",
+      "price": 480,
+      "unit": "шт",
+      "image": "images/services/denim-jacket.png",
+      "aliases": [
+        "куртка джинсова",
+        "джинсова куртка",
+        "джинсовая куртка",
+        "джинсовка"
+      ]
+    },
+    {
+      "id": 107,
+      "section": "outerwear",
+      "name": "Плащ / Тренч",
+      "description": "Делікатна чистка",
+      "price": 650,
+      "unit": "шт",
+      "image": "images/services/trench.png",
+      "aliases": [
+        "плащ",
+        "тренч"
+      ]
+    },
+    {
+      "id": 108,
+      "section": "outerwear",
+      "name": "Жилет",
+      "description": "Професійне очищення",
+      "price": 400,
+      "unit": "шт",
+      "image": "images/services/vest.png",
+      "aliases": [
+        "жилет",
+        "жилетка"
+      ]
+    },
+    {
+      "id": 109,
+      "section": "outerwear",
+      "name": "Піджак",
+      "description": "Делікатна чистка",
+      "price": 650,
+      "unit": "шт",
+      "image": "images/services/blazer.png",
+      "aliases": [
+        "піджак",
+        "пиджак",
+        "піджаки",
+        "пиджаки",
+        "жакет",
+        "жакети",
+        "блейзер",
+        "блейзери"
+      ]
+    },
+    {
+      "id": 201,
+      "section": "textile",
+      "name": "Комплект постелі",
+      "description": "Прання та прасування",
+      "price": 450,
+      "unit": "шт",
+      "image": "images/services/bedding.png",
+      "aliases": [
+        "постіль",
+        "постільна білизна",
+        "постель",
+        "постельное белье",
+        "комплект постільної білизни",
+        "кпб",
+        "постіль з прасуванням",
+        "постель с глажкой"
+      ]
+    },
+    {
+      "id": 202,
+      "section": "textile",
+      "name": "Плед",
+      "description": "Делікатне прання",
+      "price": 550,
+      "unit": "шт",
+      "image": "images/services/plaid.png",
+      "aliases": [
+        "плед",
+        "пледи",
+        "пледы"
+      ]
+    },
+    {
+      "id": 203,
+      "section": "textile",
+      "name": "Ковдра",
+      "description": "Глибоке очищення",
+      "price": 600,
+      "unit": "шт",
+      "image": "images/services/blanket.png",
+      "aliases": [
+        "ковдра",
+        "ковдра синтетична",
+        "синтетична ковдра",
+        "одеяло",
+        "синтетическое одеяло"
+      ]
+    },
+    {
+      "id": 204,
+      "section": "textile",
+      "name": "Подушка",
+      "description": "Антибактеріальна обробка",
+      "price": 320,
+      "unit": "шт",
+      "image": "images/services/pillow.png",
+      "aliases": [
+        "подушка",
+        "подушки",
+        "подушка мала",
+        "маленька подушка"
+      ]
+    },
+    {
+      "id": 205,
+      "section": "textile",
+      "name": "Ковдра пухова",
+      "description": "Преміальний догляд за пуховим наповнювачем",
+      "price": 1250,
+      "unit": "шт",
+      "image": "images/services/down-blanket.png",
+      "aliases": [
+        "ковдра пухова",
+        "пухова ковдра",
+        "пуховое одеяло"
+      ]
+    },
+    {
+      "id": 206,
+      "section": "textile",
+      "name": "Подушка велика (50х60–70х70)",
+      "description": "Антибактеріальна обробка",
+      "price": 450,
+      "unit": "шт",
+      "image": "images/services/pillow-large.png",
+      "aliases": [
+        "подушка велика",
+        "большая подушка",
+        "велика подушка"
+      ]
+    },
+    {
+      "id": 207,
+      "section": "textile",
+      "name": "М'яка іграшка",
+      "description": "Дбайливе прання та сушіння",
+      "price": 350,
+      "unit": "шт",
+      "image": "images/services/toy.png",
+      "aliases": [
+        "м'яка іграшка",
+        "мʼяка іграшка",
+        "іграшка",
+        "игрушка"
+      ]
+    },
+    {
+      "id": 208,
+      "section": "textile",
+      "name": "Покривало",
+      "description": "Прання та прасування",
+      "price": 750,
+      "unit": "шт",
+      "image": "images/services/bedspread.png",
+      "aliases": [
+        "покривало",
+        "покрывало",
+        "покривала",
+        "покрывала"
+      ]
+    },
+    {
+      "id": 209,
+      "section": "textile",
+      "name": "Тюль / органза",
+      "description": "Ціна за 1 м² — у кількості вкажіть площу виробу в м²",
+      "price": 180,
+      "unit": "м²",
+      "image": "images/services/tulle.png",
+      "aliases": [
+        "тюль",
+        "органза"
+      ]
+    },
+    {
+      "id": 210,
+      "section": "textile",
+      "name": "Штори прості",
+      "description": "Ціна за 1 м² — у кількості вкажіть площу виробу в м²",
+      "price": 260,
+      "unit": "м²",
+      "image": "images/services/curtains.png",
+      "aliases": [
+        "штори",
+        "шторы"
+      ]
+    },
+    {
+      "id": 211,
+      "section": "textile",
+      "name": "Штори щільні / на підкладці",
+      "description": "Ціна за 1 м² — у кількості вкажіть площу виробу в м²",
+      "price": 320,
+      "unit": "м²",
+      "image": "images/services/curtains-heavy.png",
+      "aliases": [
+        "щільні штори",
+        "штори на підкладці",
+        "плотные шторы"
+      ]
+    },
+    {
+      "id": 212,
+      "section": "textile",
+      "name": "Рушник малий",
+      "description": "Прання та сушіння, рушник для рук або обличчя",
+      "price": 60,
+      "unit": "шт",
+      "image": "images/services/towel.png",
+      "aliases": [
+        "рушники",
+        "полотенца",
+        "рушник",
+        "полотенце"
+      ]
+    },
+    {
+      "id": 213,
+      "section": "textile",
+      "name": "Халат",
+      "description": "Прання та сушіння",
+      "price": 350,
+      "unit": "шт",
+      "image": "images/services/robe.png",
+      "aliases": [
+        "халат"
+      ]
+    },
+    {
+      "id": 214,
+      "section": "textile",
+      "name": "Наматрацник",
+      "description": "Глибоке очищення",
+      "price": 800,
+      "unit": "шт",
+      "image": "images/services/mattress-cover.png",
+      "aliases": [
+        "наматрацник",
+        "наматрасник"
+      ]
+    },
+    {
+      "id": 215,
+      "section": "textile",
+      "name": "Рушник великий",
+      "description": "Прання та сушіння, банний рушник",
+      "price": 100,
+      "unit": "шт",
+      "image": "images/services/towel.png",
+      "aliases": [
+        "великий рушник",
+        "банний рушник",
+        "большое полотенце",
+        "банное полотенце"
+      ]
+    },
+    {
+      "id": 301,
+      "section": "shoes",
+      "name": "Кросівки",
+      "description": "Комплексне очищення",
+      "price": 550,
+      "unit": "пара",
+      "image": "images/services/sneakers.png",
+      "aliases": [
+        "кросівки",
+        "кросовки",
+        "кеди",
+        "кеды"
+      ]
+    },
+    {
+      "id": 302,
+      "section": "shoes",
+      "name": "Черевики",
+      "description": "Професійне очищення",
+      "price": 700,
+      "unit": "пара",
+      "image": "images/services/boots.png",
+      "aliases": [
+        "черевики",
+        "ботинки"
+      ]
+    },
+    {
+      "id": 401,
+      "section": "accessories",
+      "name": "Рюкзак",
+      "description": "Комплексне очищення",
+      "price": 550,
+      "unit": "шт",
+      "image": "images/services/backpack.png",
+      "aliases": [
+        "рюкзак"
+      ]
+    },
+    {
+      "id": 402,
+      "section": "accessories",
+      "name": "Сумка",
+      "description": "Делікатне очищення",
+      "price": 650,
+      "unit": "шт",
+      "image": "images/services/bag.png",
+      "aliases": [
+        "сумка",
+        "сумку"
+      ]
+    },
+    {
+      "id": 403,
+      "section": "accessories",
+      "name": "Краватка",
+      "description": "Чистка та прасування",
+      "price": 150,
+      "unit": "шт",
+      "image": "images/services/tie.png",
+      "aliases": [
+        "краватка",
+        "галстук"
+      ]
+    },
+    {
+      "id": 404,
+      "section": "accessories",
+      "name": "Шарф / Хустка",
+      "description": "Делікатне прання",
+      "price": 300,
+      "unit": "шт",
+      "image": "images/services/scarf.png",
+      "aliases": [
+        "шарф",
+        "хустка",
+        "платок"
+      ]
+    },
+    {
+      "id": 501,
+      "section": "aquaclean",
+      "name": "Весільна сукня",
+      "description": "Аквачистка та делікатне сушіння",
+      "price": 3000,
+      "unit": "шт",
+      "image": "images/services/wedding.png",
+      "aliases": [
+        "весільна сукня",
+        "свадебное платье"
+      ]
+    },
+    {
+      "id": 502,
+      "section": "aquaclean",
+      "name": "Кашемір",
+      "description": "Делікатна аквачистка",
+      "price": 650,
+      "unit": "шт",
+      "image": "images/services/cashmere.png",
+      "aliases": [
+        "кашемір",
+        "кашемир"
+      ]
+    },
+    {
+      "id": 701,
+      "section": "ironing",
+      "name": "Футболка",
+      "description": "Тільки прасування, без прання",
+      "price": 90,
+      "unit": "шт",
+      "image": "images/services/iron-tshirt.png"
+    },
+    {
+      "id": 702,
+      "section": "ironing",
+      "name": "Сорочка",
+      "description": "Тільки прасування, без прання",
+      "price": 130,
+      "unit": "шт",
+      "image": "images/services/iron-shirt.png"
+    },
+    {
+      "id": 703,
+      "section": "ironing",
+      "name": "Джинси",
+      "description": "Тільки прасування, без прання",
+      "price": 100,
+      "unit": "шт",
+      "image": "images/services/iron-jeans.png"
+    },
+    {
+      "id": 704,
+      "section": "ironing",
+      "name": "Брюки зі стрілками",
+      "description": "Тільки прасування, без прання",
+      "price": 180,
+      "unit": "шт",
+      "image": "images/services/iron-trousers.png"
+    },
+    {
+      "id": 705,
+      "section": "ironing",
+      "name": "Спідниця коротка",
+      "description": "Тільки прасування, без прання",
+      "price": 100,
+      "unit": "шт",
+      "image": "images/services/iron-skirt-short.png"
+    },
+    {
+      "id": 706,
+      "section": "ironing",
+      "name": "Спідниця довга",
+      "description": "Тільки прасування, без прання",
+      "price": 150,
+      "unit": "шт",
+      "image": "images/services/iron-skirt-long.png"
+    },
+    {
+      "id": 707,
+      "section": "ironing",
+      "name": "Сукня",
+      "description": "Тільки прасування, без прання",
+      "price": 250,
+      "unit": "шт",
+      "image": "images/services/iron-dress.png"
+    },
+    {
+      "id": 708,
+      "section": "ironing",
+      "name": "Блуза",
+      "description": "Тільки прасування, без прання",
+      "price": 180,
+      "unit": "шт",
+      "image": "images/services/iron-blouse.png"
+    },
+    {
+      "id": 709,
+      "section": "ironing",
+      "name": "Кофта / Светр",
+      "description": "Тільки прасування, без прання",
+      "price": 200,
+      "unit": "шт",
+      "image": "images/services/iron-sweater.png"
+    },
+    {
+      "id": 710,
+      "section": "ironing",
+      "name": "Краватка",
+      "description": "Тільки прасування, без прання",
+      "price": 100,
+      "unit": "шт",
+      "image": "images/services/iron-tie.png"
+    },
+    {
+      "id": 711,
+      "section": "ironing",
+      "name": "Комплект постільної білизни",
+      "description": "Тільки прасування, без прання",
+      "price": 200,
+      "unit": "шт",
+      "image": "images/services/iron-bedding.png"
+    },
+    {
+      "id": 712,
+      "section": "ironing",
+      "name": "Піджак",
+      "description": "Прасування відпарювачем",
+      "price": 180,
+      "unit": "шт",
+      "image": "images/services/iron-blazer.png"
+    },
+    {
+      "id": 713,
+      "section": "ironing",
+      "name": "Пальто",
+      "description": "Прасування відпарювачем",
+      "price": 320,
+      "unit": "шт",
+      "image": "images/services/iron-coat.png"
+    },
+    {
+      "id": 714,
+      "section": "ironing",
+      "name": "Куртка",
+      "description": "Прасування відпарювачем",
+      "price": 320,
+      "unit": "шт",
+      "image": "images/services/iron-jacket.png"
+    },
+    {
+      "id": 801,
+      "section": "extra",
+      "name": "Виведення плями",
+      "description": "Ціна за одну пляму",
+      "price": 80,
+      "unit": "шт",
+      "image": "images/services/stain.png"
+    },
+    {
+      "id": 802,
+      "section": "extra",
+      "name": "Чистка катишків",
+      "description": "За одну річ",
+      "price": 100,
+      "unit": "шт",
+      "image": "images/services/pilling.png"
+    },
+    {
+      "id": 803,
+      "section": "extra",
+      "name": "Кондиціонування",
+      "description": "Додатково до прання, за одне завантаження",
+      "price": 30,
+      "unit": "шт",
+      "image": "images/services/conditioner.png"
+    },
+    {
+      "id": 804,
+      "section": "extra",
+      "name": "Відбілювання",
+      "description": "Додатково до прання, за одне завантаження",
+      "price": 40,
+      "unit": "шт",
+      "image": "images/services/bleach.png"
+    },
+    {
+      "id": 805,
+      "section": "extra",
+      "name": "Накрохмалювання білизни",
+      "description": "Для комплекту постільної білизни",
+      "price": 200,
+      "unit": "шт",
+      "image": "images/services/starch.png"
+    },
+    {
+      "id": 601,
+      "section": "atelier",
+      "name": "Підшити штани",
+      "description": "Збереження оригінального низу",
+      "price": 450,
+      "unit": "шт",
+      "aliases": [
+        "підшити штани",
+        "подшить брюки",
+        "подшить штаны",
+        "укоротити штани",
+        "підшити джинси",
+        "подшить джинсы",
+        "вкоротити джинси"
+      ]
+    },
+    {
+      "id": 602,
+      "section": "atelier",
+      "name": "Ремонт шва",
+      "description": "Відновлення цілісності виробу",
+      "price": 280,
+      "unit": "шт",
+      "aliases": [
+        "ремонт шва",
+        "зашить шов",
+        "зашити шов"
+      ]
+    },
+    {
+      "id": 603,
+      "section": "atelier",
+      "name": "Заміна блискавки: штани / спідниця",
+      "description": "Без вартості блискавки",
+      "price": 550,
+      "unit": "шт",
+      "aliases": [
+        "заміна блискавки",
+        "заміна блискавки у штанах",
+        "заменить молнию",
+        "замена молнии",
+        "замена молнии в штанах"
+      ]
+    },
+    {
+      "id": 604,
+      "section": "atelier",
+      "name": "Укоротити сукню / спідницю",
+      "description": "Точний підгін по фігурі",
+      "price": 550,
+      "unit": "шт",
+      "aliases": [
+        "укоротити сукню",
+        "укоротити спідницю",
+        "укоротить платье",
+        "укоротить юбку"
+      ]
+    },
+    {
+      "id": 605,
+      "section": "atelier",
+      "name": "Вкоротити рукави сорочки",
+      "description": "Точний підгін по фігурі",
+      "price": 450,
+      "unit": "шт",
+      "aliases": [
+        "вкоротити рукави",
+        "укоротить рукава",
+        "вкоротити рукав"
+      ]
+    },
+    {
+      "id": 606,
+      "section": "atelier",
+      "name": "Ремонт кишень",
+      "description": "Відновлення цілісності виробу",
+      "price": 450,
+      "unit": "шт",
+      "aliases": [
+        "ремонт кишень",
+        "ремонт карманов",
+        "зашити кишеню",
+        "зашить карман"
+      ]
+    },
+    {
+      "id": 607,
+      "section": "atelier",
+      "name": "Дрібний ремонт одягу",
+      "description": "Дрібні виправлення та підгонка",
+      "price": 250,
+      "unit": "шт",
+      "aliases": [
+        "дрібний ремонт",
+        "мелкий ремонт",
+        "невеликий ремонт"
+      ]
+    },
+    {
+      "id": 608,
+      "section": "atelier",
+      "name": "Підшити джинси зі збереженням фабричного шву",
+      "description": "Оригінальний низ зберігається",
+      "price": 600,
+      "unit": "шт",
+      "aliases": [
+        "фабричний шов",
+        "фабричный шов",
+        "зі збереженням шву",
+        "с сохранением шва"
+      ]
+    },
+    {
+      "id": 609,
+      "section": "atelier",
+      "name": "Вкоротити рукави піджака / пальто / куртки",
+      "description": "Точний підгін по фігурі",
+      "price": 900,
+      "unit": "шт",
+      "aliases": [
+        "рукави піджака",
+        "рукава пиджака",
+        "рукави пальто",
+        "рукава пальто",
+        "рукави куртки",
+        "рукава куртки"
+      ]
+    },
+    {
+      "id": 610,
+      "section": "atelier",
+      "name": "Заміна блискавки: куртка / вітровка",
+      "description": "Без вартості блискавки",
+      "price": 900,
+      "unit": "шт",
+      "aliases": [
+        "заміна блискавки у куртці",
+        "замена молнии в куртке",
+        "блискавка в куртці"
+      ]
+    },
+    {
+      "id": 611,
+      "section": "atelier",
+      "name": "Заміна блискавки: пуховик / пальто",
+      "description": "Без вартості блискавки",
+      "price": 1200,
+      "unit": "шт",
+      "aliases": [
+        "блискавка в пуховику",
+        "молния в пуховике",
+        "блискавка в пальто",
+        "молния в пальто"
+      ]
+    },
+    {
+      "id": 612,
+      "section": "atelier",
+      "name": "Пришити ґудзик",
+      "description": "За один ґудзик",
+      "price": 80,
+      "unit": "шт",
+      "aliases": [
+        "пришити ґудзик",
+        "пришити гудзик",
+        "пришить пуговицу"
+      ]
+    }
+  ],
+  "b2b": {
+    "unit": "кг",
+    "items": [
+      {
+        "name": "Прання однотипного текстилю",
+        "price": 90
+      },
+      {
+        "name": "Прання + сушіння",
+        "price": 110
+      },
+      {
+        "name": "Прання + прасування",
+        "price": 150
+      },
+      {
+        "name": "Постільна білизна партіями",
+        "price": 120
+      },
+      {
+        "name": "Рушники партіями",
+        "price": 100
+      }
+    ],
+    "min_kg": 10,
+    "min_amount": 1000,
+    "price_from": true
+  },
+  "delivery": {
+    "zones": [
+      {
+        "name": "В межах ЖК",
+        "price": 0,
+        "free_from": 0
+      },
+      {
+        "name": "Центр: Шевченківський, Печерський, Подільський райони",
+        "price": 150,
+        "free_from": 1500
+      },
+      {
+        "name": "Інші райони Києва",
+        "price": 250,
+        "free_from": 2500
+      }
+    ],
+    "price_is_one_way": true,
+    "min_order_outside": 700,
+    "turnaround": "24–48 годин"
+  },
+  "club": [
+    {
+      "from": 2000,
+      "discount": 5
+    },
+    {
+      "from": 5000,
+      "discount": 10
+    }
+  ],
+  "inspection_only": [
+    "натуральна шкіра",
+    "замша",
+    "хутро",
+    "весільні сукні",
+    "дизайнерські речі",
+    "речі з великою кількістю декору",
+    "речі без ярлика догляду",
+    "речі з нестабільним фарбуванням",
+    "старі або складні плями"
+  ]
+}
