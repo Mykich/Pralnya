@@ -2814,8 +2814,9 @@ async def open_schedule_menu(message: Message, state: FSMContext):
 async def send_schedule(message: Message, state: FSMContext):
     await message.answer(
         "🕐 <b>Графік роботи:</b>\n"
-        "Пн – Сб: 09:00 – 19:00\n"
-        "Нд – за домовленістю\n\n"
+        "Пн – Сб: 08:00 – 21:00\n"
+        "Приймання речей: Пн – Пт до 19:00, Сб до 17:00\n"
+        "Нд – вихідний\n\n"
         "📌 Уточнюйте можливість термінового замовлення у чаті з адміністратором."
     )
 
