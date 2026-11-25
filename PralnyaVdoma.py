@@ -30,6 +30,29 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQu
 from collections import Counter
 app = FastAPI()
 
+
+DATE_FORMATS = (
+    "%Y-%m-%d",
+    "%d.%m.%Y",
+    "%Y-%m-%d %H:%M",
+    "%d.%m.%Y %H:%M",
+)
+
+
+def parse_order_date(value):
+    """Преобразует дату заказа в date независимо от исходного формата."""
+
+    text = str(value or "").strip()
+
+    for fmt in DATE_FORMATS:
+        try:
+            return datetime.strptime(text, fmt).date()
+        except ValueError:
+            continue
+
+    return None
+
+
 origins = [
     "https://mykich.github.io",
 ]
@@ -285,6 +308,25 @@ def normalize_phone(phone):
     """Оставляет только цифры номера телефона"""
     return "".join(filter(str.isdigit, str(phone or "")))
 
+def order_belongs_to(row, telegram_id, phone):
+    """Проверяет принадлежность заказа по Telegram ID или телефону."""
+
+    tg = str(telegram_id or "").strip()
+
+    # Основной способ: Telegram ID в колонке P
+    if tg and len(row) > 15 and str(row[15]).strip() == tg:
+        return True
+
+    # Запасной способ: телефон
+    p = normalize_phone(phone)
+
+    if p and len(row) > 2:
+        order_phone = normalize_phone(row[2])
+
+        if order_phone and order_phone[-10:] == p[-10:]:
+            return True
+
+    return False
 
 # --- конец ---
 def is_menu_button(text):
@@ -869,7 +911,7 @@ async def admin_atelier_requests(message: Message):
         active_rows = []
 
         for row in rows:
-            status = row[6].strip() if len(row) > 6 and row[6] else "Нова"
+            status = row[9].strip() if len(row) > 9 and row[9] else "Нова заявка"
 
             if status not in ["Закрита", "Відмова"]:
                 active_rows.append(row)
@@ -887,19 +929,22 @@ async def admin_atelier_requests(message: Message):
 
         for i, row in enumerate(last_requests, start=1):
             date = row[0] if len(row) > 0 and row[0] else "—"
-            request_number = row[9] if len(row) > 9 and row[9] else "—"
-            name = row[1] if len(row) > 1 and row[1] else "—"
-            telegram_id = row[2] if len(row) > 2 and row[2] else "—"
-            username = row[3] if len(row) > 3 and row[3] else "—"
-            description = row[4] if len(row) > 4 and row[4] else "—"
-            photo = row[5] if len(row) > 5 and row[5] else "Немає"
-            status = row[6] if len(row) > 6 and row[6] else "Нова"
-            admin_comment = row[7] if len(row) > 7 and row[7] else "—"
+            request_number = row[2] if len(row) > 2 and row[2] else "—"
+            source = row[1] if len(row) > 1 and row[1] else "—"
+            name = row[3] if len(row) > 3 and row[3] else "—"
+            phone = row[4] if len(row) > 4 and row[4] else "—"
+            description = row[5] if len(row) > 5 and row[5] else "—"
+            photo = "Є" if len(row) > 6 and row[6] else "Немає"
+            telegram_id = row[7] if len(row) > 7 and row[7] else "—"
+            username = row[8] if len(row) > 8 and row[8] else "—"
+            status = row[9] if len(row) > 9 and row[9] else "Нова заявка"
+            admin_comment = row[10] if len(row) > 10 and row[10] else "—"
 
             text += (
-                f"{i}. <b>{date}</b>\n"
+                f"{i}. <b>{date}</b> · {source}\n"
                 f"🆔 Заявка: <b>{request_number}</b>\n"
                 f"👤 {name}\n"
+                f"📞 {phone}\n"
                 f"🆔 <code>{telegram_id}</code>\n"
                 f"🔗 {username}\n"
                 f"💬 {description}\n"
@@ -935,7 +980,7 @@ async def admin_b2b_requests(message: Message):
         active_rows = []
 
         for row in rows:
-            status = row[6].strip() if len(row) > 6 and row[6] else "Нова"
+            status = row[9].strip() if len(row) > 9 and row[9] else "Нова заявка"
 
             if status not in ["Закрита", "Відмова"]:
                 active_rows.append(row)
@@ -953,19 +998,21 @@ async def admin_b2b_requests(message: Message):
 
         for i, row in enumerate(last_requests, start=1):
             date = row[0] if len(row) > 0 and row[0] else "—"
-            request_number = row[9] if len(row) > 9 and row[9] else "—"
-            name = row[1] if len(row) > 1 and row[1] else "—"
-            telegram_id = row[2] if len(row) > 2 and row[2] else "—"
-            username = row[3] if len(row) > 3 and row[3] else "—"
-            description = row[4] if len(row) > 4 and row[4] else "—"
-            photo = row[5] if len(row) > 5 and row[5] else "Немає"
-            status = row[6] if len(row) > 6 and row[6] else "Нова"
-            admin_comment = row[7] if len(row) > 7 and row[7] else "—"
+            request_number = row[2] if len(row) > 2 and row[2] else "—"
+            name = row[3] if len(row) > 3 and row[3] else "—"
+            phone = row[4] if len(row) > 4 and row[4] else "—"
+            description = row[5] if len(row) > 5 and row[5] else "—"
+            photo = "Є" if len(row) > 6 and row[6] else "Немає"
+            telegram_id = row[7] if len(row) > 7 and row[7] else "—"
+            username = row[8] if len(row) > 8 and row[8] else "—"
+            status = row[9] if len(row) > 9 and row[9] else "Нова заявка"
+            admin_comment = row[10] if len(row) > 10 and row[10] else "—"
 
             text += (
                 f"{i}. <b>{date}</b>\n"
                 f"🆔 Заявка: <b>{request_number}</b>\n"
                 f"👤 {name}\n"
+                f"📞 {phone}\n"
                 f"🆔 <code>{telegram_id}</code>\n"
                 f"🔗 {username}\n"
                 f"💬 {description}\n"
@@ -1050,9 +1097,9 @@ async def show_statistics_menu(message: Message, state: FSMContext):
             if not date_str:
                 continue
 
-            try:
-                order_date = datetime.strptime(date_str, "%d.%m.%Y").date()
-            except ValueError:
+            order_date = parse_order_date(date_str)
+
+            if not order_date:
                 continue
 
             if canceled and "Скасовано" not in status:
@@ -3356,12 +3403,8 @@ async def user_orders(message: Message, state: FSMContext):
         user_orders = []
 
         for row in orders:
-            if len(row) > 2:
-                order_phone = normalize_phone(row[2])
-
-                # Сравниваем последние 10 цифр
-                if order_phone[-10:] == phone[-10:]:
-                    user_orders.append(row)
+            if order_belongs_to(row, telegram_id, phone):
+                user_orders.append(row)
 
         if not user_orders:
             await message.answer("📭 У вас ще немає замовлень.")
@@ -3491,25 +3534,25 @@ async def notify_completed_orders():
                 continue
 
             phone = normalize_phone(row[phone_index]) if len(row) > phone_index else ""
-            order_number = (
-                row[order_number_index] if len(row) > order_number_index else "—"
-            )
-            date = row[date_index] if len(row) > date_index else "—"
 
-            if not phone:
-                continue
+            # Telegram ID непосредственно из колонки P
+            tg_cell = row[15].strip() if len(row) > 15 else ""
+            telegram_id = tg_cell or None
 
-            telegram_id = None
+            # Если ID отсутствует — ищем клиента по телефону
+            if not telegram_id and phone:
+                for client in clients:
+                    client_phone = normalize_phone(client.get("phone", ""))
 
-            for client in clients:
-                client_phone = normalize_phone(client.get("phone", ""))
-
-                if client_phone[-10:] == phone[-10:]:
-                    telegram_id = client.get("telegram_id")
-                    break
+                    if client_phone and client_phone[-10:] == phone[-10:]:
+                        telegram_id = client.get("telegram_id")
+                        break
 
             if not telegram_id:
-                print(f"⚠️ Не знайдено Telegram ID для {phone}")
+                print(
+                    f"⚠️ Не знайдено Telegram ID для рядка {i} "
+                    f"({phone or 'без телефону'})"
+                )
                 continue
 
             message_text = STATUS_MESSAGES.get(
@@ -3556,6 +3599,14 @@ async def notify_completed_orders():
                     except Exception as e:
                         print(f"❌ Не вдалося надіслати запит на оцінку для {phone}: {e}")
                         logging.error("Помилка запиту оцінки", exc_info=True)
+            except (TelegramBadRequest, TelegramForbiddenError) as e:
+                # Клієнт видалив акаунт / заблокував бота / чат не існує —
+                # повторювати марно, фіксуємо статус, щоб не слати щоцикл
+                logging.warning(f"Статус не доставлено {phone}: {e}")
+                try:
+                    sheet.update_cell(i, last_notified_status_index + 1, status)
+                except Exception:
+                    logging.error("Не вдалося зафіксувати статус", exc_info=True)
 
             except Exception as e:
                 print(f"❌ Помилка відправки статусу для {phone}: {e}")
@@ -3634,9 +3685,7 @@ async def personal_account(message: Message, state: FSMContext):
         if len(row) <= 2:
             continue
 
-        order_phone = normalize_phone(row[2])
-
-        if phone and order_phone[-10:] == phone[-10:]:
+        if order_belongs_to(row, telegram_id, phone):
             user_orders.append(row)
 
             status = row[8] if len(row) > 8 else ""
@@ -3785,18 +3834,34 @@ async def send_winback_messages():
         clients = sheet_clients.get_all_records()
         headers = sheet_clients.row_values(1)
 
-        # Остання дата замовлення для кожного telegram_id
+       # Остання дата замовлення для кожного telegram_id
         last_order_date = {}
+
         for row in orders:
             tg_id = str(row.get("telegram_id", "")).strip()
             date_str = str(row.get("Дата", "")).strip()
+
             if not tg_id or not date_str:
                 continue
+
             try:
-                order_date = datetime.strptime(date_str, "%Y-%m-%d")
-            except ValueError:
+                order_date = parse_order_date(date_str)
+
+                if order_date is None:
+                    continue
+
+                order_date = datetime.combine(
+                    order_date,
+                    datetime.min.time()
+                )
+
+            except (ValueError, TypeError):
                 continue
-            if tg_id not in last_order_date or order_date > last_order_date[tg_id]:
+
+            if (
+                tg_id not in last_order_date
+                or order_date > last_order_date[tg_id]
+            ):
                 last_order_date[tg_id] = order_date
 
         # Додаємо колонку для дати win-back, якщо її ще нема
