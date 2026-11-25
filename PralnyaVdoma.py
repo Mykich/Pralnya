@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import google.generativeai as genai
 import logging
 import traceback
+import html
 import re
 import threading
 import uvicorn
@@ -302,6 +303,11 @@ ITEM_ALIASES = {
     ],
     "дрібний ремонт": ["дрібний ремонт", "мелкий ремонт", "невеликий ремонт"],
 }
+
+
+def esc(value):
+    """Екранує текст клієнта для повідомлень з parse_mode=HTML (символи < > & ламали відправку)."""
+    return html.escape(str(value if value is not None else ""), quote=False)
 
 
 def normalize_phone(phone):
@@ -836,12 +842,12 @@ async def show_orders(message: Message):
             text += (
                 f"<b>{i}. 🧾 {order_number}</b>\n"
                 f"📅 {date}\n"
-                f"👤 {name}\n"
+                f"👤 {esc(name)}\n"
                 f"📞 {phone}\n"
-                f"🏢 Квартира: <b>{apartment}</b>\n"
-                f"👚 Речі: {items}\n"
+                f"🏢 Квартира: <b>{esc(apartment)}</b>\n"
+                f"👚 Речі: {esc(items)}\n"
                 f"🔎 Розпізнано: {recognized}\n"
-                f"🕓 Час: {time_text}\n"
+                f"🕓 Час: {esc(time_text)}\n"
                 f"📦 Статус: <b>{status}</b>\n"
                 f"💰 Сума: <b>{amount} грн</b>\n\n"
             )
@@ -925,9 +931,9 @@ async def show_order_photo(message: Message, state: FSMContext):
         caption = (
             f"📸 <b>Фото замовлення</b>\n\n"
             f"🆔 Номер: <b>{order_number}</b>\n"
-            f"👤 Клієнт: {name}\n"
-            f"🏢 Квартира: {apartment}\n"
-            f"👚 Речі: {items}\n"
+            f"👤 Клієнт: {esc(name)}\n"
+            f"🏢 Квартира: {esc(apartment)}\n"
+            f"👚 Речі: {esc(items)}\n"
             f"📦 Статус: {status}"
         )
 
@@ -971,7 +977,7 @@ async def admin_atelier_requests(message: Message):
             #          G Статус, H Коментар, I Ост. повідомлений статус, J Номер, K Сума
             status = row[6].strip() if len(row) > 6 and row[6] else "Нова"
 
-            if status not in ["Закрита", "Відмова"]:
+            if status not in ["Скасовано", "Закрита", "Відмова"]:
                 active_rows.append(row)
 
         if not active_rows:
@@ -1000,14 +1006,14 @@ async def admin_atelier_requests(message: Message):
             text += (
                 f"{i}. <b>{date}</b>\n"
                 f"🆔 Заявка: <b>{request_number}</b>\n"
-                f"👤 {name}\n"
+                f"👤 {esc(name)}\n"
                 f"💰 Сума: {amount}\n"
                 f"🆔 <code>{telegram_id}</code>\n"
-                f"🔗 {username}\n"
-                f"💬 {description}\n"
+                f"🔗 {esc(username)}\n"
+                f"💬 {esc(description)}\n"
                 f"📷 Фото: {photo}\n"
                 f"📌 Статус: <b>{status}</b>\n"
-                f"📝 Коментар: {admin_comment}\n\n"
+                f"📝 Коментар: {esc(admin_comment)}\n\n"
             )
 
         await message.answer(text, reply_markup=admin_kb)
@@ -1039,7 +1045,7 @@ async def admin_b2b_requests(message: Message):
         for row in rows:
             status = row[9].strip() if len(row) > 9 and row[9] else "Нова заявка"
 
-            if status not in ["Закрита", "Відмова"]:
+            if status not in ["Відхилено", "Закрита", "Відмова"]:
                 active_rows.append(row)
 
         if not active_rows:
@@ -1068,14 +1074,14 @@ async def admin_b2b_requests(message: Message):
             text += (
                 f"{i}. <b>{date}</b>\n"
                 f"🆔 Заявка: <b>{request_number}</b>\n"
-                f"👤 {name}\n"
+                f"👤 {esc(name)}\n"
                 f"📞 {phone}\n"
                 f"🆔 <code>{telegram_id}</code>\n"
-                f"🔗 {username}\n"
-                f"💬 {description}\n"
+                f"🔗 {esc(username)}\n"
+                f"💬 {esc(description)}\n"
                 f"📷 Фото: {photo}\n"
                 f"📌 Статус: <b>{status}</b>\n"
-                f"📝 Коментар: {admin_comment}\n\n"
+                f"📝 Коментар: {esc(admin_comment)}\n\n"
             )
 
         await message.answer(text, reply_markup=admin_kb)
@@ -1506,11 +1512,18 @@ async def save_new_status(message: Message, state: FSMContext):
         await message.answer("🔧 Повернення до адмін-меню:", reply_markup=admin_kb)
         return
 
-    new_status = message.text.strip()
+    new_status = (message.text or "").strip()
+
+    # Лише статуси з єдиного словника, інакше notify_completed_orders надішле клієнту
+    # «невідомий» текст, а фільтри кабінету/статистики його не впізнають
+    if new_status not in ORDER_STATUSES:
+        await message.answer(
+            "❗ Оберіть статус кнопкою нижче:", reply_markup=status_kb
+        )
+        return
 
     data = await state.get_data()
     row_number = data.get("row_number")
-    phone = data.get("phone")
 
     try:
         headers = sheet.row_values(1)
@@ -1518,48 +1531,20 @@ async def save_new_status(message: Message, state: FSMContext):
         status_col = headers.index("Статус") + 1
         notified_col = headers.index("Повідомлено") + 1
 
-        # обновляем статус
         sheet.update_cell(row_number, status_col, new_status)
 
-        # если НЕ выполнено — сбрасываем уведомление
+        # якщо НЕ виконано — скидаємо позначку «Повідомлено» (її використовує нагадування)
         if new_status != "✅ Виконано":
             sheet.update_cell(row_number, notified_col, "")
 
-        # ищем клиента
-        client_sheet = client_gsheets.open("Pralnya").worksheet("Clients")
-        clients = client_sheet.get_all_records()
-
-        telegram_id = None
-
-        for client in clients:
-            client_phone = normalize_phone(client.get("phone", ""))
-
-            if client_phone[-10:] == phone[-10:]:
-                telegram_id = client.get("telegram_id")
-                break
-
-        # отправляем уведомление клиенту
-        if telegram_id:
-
-            status_messages = {
-                "🟡 Очікує": "🟡 Ваше замовлення очікує обробки.",
-                "🚚 Забрано": "🚚 Речі вже забрано.",
-                "🧺 У пранні": "🧺 Ваші речі вже у пранні.",
-                "🧼 Чиститься": "🧼 Речі проходять чистку.",
-                "🧵 В ательє": "🧵 Ваші речі зараз в ательє.",
-                "🚗 Доставляється": "🚗 Замовлення вже доставляється.",
-                "✅ Виконано": "✅ Ваше замовлення виконано!",
-            }
-
-            text = status_messages.get(
-                new_status, f"📦 Статус вашого замовлення оновлено:\n{new_status}"
-            )
-
-            await bot.send_message(
-                int(telegram_id), f"📦 <b>Оновлення статусу</b>\n\n{text}"
-            )
-
-        await message.answer("✅ Статус успішно оновлено.", reply_markup=admin_kb)
+        # Клієнту повідомлення надсилає лише notify_completed_orders (раз на 5 хв):
+        # він же записує «Останній повідомлений статус», тож клієнт отримує рівно одне
+        # повідомлення. Раніше тут була ще одна пряма відправка — і клієнт отримував дубль.
+        await message.answer(
+            f"✅ Статус оновлено: {new_status}\n"
+            "Клієнт отримає повідомлення протягом 5 хвилин.",
+            reply_markup=admin_kb,
+        )
 
     except Exception as e:
         print(f"❌ Помилка оновлення статусу: {e}")
@@ -1899,10 +1884,10 @@ async def handle_atelier_consultation(message: Message, state: FSMContext):
     admin_text = (
         "🧵 <b>Нова заявка в ательє</b>\n\n"
         f"🆔 Заявка: <b>{request_number}</b>\n"
-        f"👤 Клієнт: <b>{name}</b>\n"
+        f"👤 Клієнт: <b>{esc(name)}</b>\n"
         f"🆔 Telegram ID: <code>{telegram_id}</code>\n"
-        f"🔗 Username: {username}\n\n"
-        f"💬 Опис:\n{text}"
+        f"🔗 Username: {esc(username)}\n\n"
+        f"💬 Опис:\n{esc(text)}"
     )
 
     photo_file_id = message.photo[-1].file_id if message.photo else ""
@@ -1910,7 +1895,7 @@ async def handle_atelier_consultation(message: Message, state: FSMContext):
     try:
         atelier_sheet.append_row(
             [
-                datetime.now().strftime("%d.%m.%Y %H:%M"),
+                datetime.now().strftime("%Y-%m-%d %H:%M"),
                 name,
                 telegram_id,
                 username,
@@ -1921,7 +1906,7 @@ async def handle_atelier_consultation(message: Message, state: FSMContext):
                 "Нова",
                 request_number,
             ],
-            value_input_option="USER_ENTERED",
+            value_input_option="RAW",
         )
         print("✅ Заявка ательє записана в лист Atelier")
     except Exception as e:
@@ -2020,15 +2005,15 @@ async def handle_b2b_consultation(message: Message, state: FSMContext):
     admin_text = (
         "🏢 <b>Нова B2B-заявка (Бот)</b>\n\n"
         f"🆔 Заявка: <b>{request_number}</b>\n"
-        f"👤 Клієнт: <b>{name}</b>\n"
+        f"👤 Клієнт: <b>{esc(name)}</b>\n"
         f"🆔 Telegram ID: <code>{telegram_id}</code>\n"
-        f"🔗 Username: {username}\n\n"
-        f"💬 Опис:\n{text}"
+        f"🔗 Username: {esc(username)}\n\n"
+        f"💬 Опис:\n{esc(text)}"
     )
 
     # Формируем ровно 12 элементов под структуру B2B_General
     row_data = [
-        datetime.now().strftime("%d.%m.%Y %H:%M"),  # 1. Дата
+        datetime.now().strftime("%Y-%m-%d %H:%M"),  # 1. Дата
         "Бот",                                      # 2. Джерело
         request_number,                             # 3. Номер заявки
         name,                                       # 4. Клієнт (Ім'я)
@@ -2039,14 +2024,11 @@ async def handle_b2b_consultation(message: Message, state: FSMContext):
         username,                                   # 9. Username
         "Нова заявка",                              # 10. Статус
         "",                                         # 11. Коментар адміна
-        ""                                          # 12. Останній повідомлений статус
+        "Нова заявка",                              # 12. Останній повідомлений статус (щоб не слати клієнту «нову заявку» ще раз)
     ]
 
     try:
-        b2b_sheet.append_row(
-            row_data,
-            value_input_option="USER_ENTERED",
-        )
+        b2b_sheet.append_row(row_data, value_input_option="RAW")
         print("✅ B2B-заявка записана в лист B2B_General")
     except Exception as e:
         print(f"❌ Помилка запису B2B-заявки в лист B2B_General: {e}")
@@ -2107,7 +2089,7 @@ async def check_consultation_statuses(bot: Bot):
                         int(telegram_id),
                         "🧵 <b>Оновлення по заявці ательє</b>\n\n"
                         f"🆔 Заявка: <b>{request_number}</b>\n"
-                        f"💬 Заявка: {description}\n"
+                        f"💬 Заявка: {esc(description)}\n"
                         f"📌 Статус: <b>{status}</b>\n"
                         f"📝 Коментар: {admin_comment or '—'}",
                     )
@@ -2150,7 +2132,7 @@ async def check_consultation_statuses(bot: Bot):
                         int(telegram_id),
                         "🏢 <b>Оновлення по B2B-заявці</b>\n\n"
                         f"🆔 Заявка: <b>{request_number}</b>\n"
-                        f"💬 Заявка: {description}\n"
+                        f"💬 Заявка: {esc(description)}\n"
                         f"📌 Статус: <b>{status}</b>\n"
                         f"📝 Коментар: {admin_comment or '—'}",
                     )
@@ -2194,7 +2176,7 @@ async def global_cancel(message: Message, state: FSMContext):
     time_text = user_data.get("time", "—")
     phone = normalize_phone(user_data.get("phone", ""))
     name = message.from_user.full_name
-    date = datetime.now().strftime("%d.%m.%Y")
+    date = datetime.now().strftime("%Y-%m-%d")
     order_number = generate_order_number()
     recognized_table_text = "Скасовано"
 
@@ -2212,13 +2194,13 @@ async def global_cancel(message: Message, state: FSMContext):
         0,  # K — Сума
         "",  # L — Фото
         order_number,  # M — Номер замовлення
-        "",
-        recognized_table_text,  # N — Останній повідомлений статус
+        "❌ Скасовано",  # N — Останній повідомлений статус (клієнт сам скасував, сповіщати не треба)
+        recognized_table_text,  # O — Розпізнано
         str(message.from_user.id),  # P — telegram_id
     ]
 
     try:
-        sheet.append_row(row_data, value_input_option="USER_ENTERED")
+        sheet.append_row(row_data, value_input_option="RAW")
         print("🚫 Скасування записано в таблицю.")
     except Exception as e:
         print(f"❌ Помилка запису скасування: {e}")
@@ -2272,8 +2254,8 @@ async def start_order(message: Message, state: FSMContext):
         await state.update_data(apartment=apartment, phone=phone)
 
         await message.answer(
-            f"👋 <b>{name}</b>, раді бачити вас знову.\n\n"
-            f"🏢 Квартира: <b>{apartment}</b>\n\n"
+            f"👋 <b>{esc(name)}</b>, раді бачити вас знову.\n\n"
+            f"🏢 Квартира: <b>{esc(apartment)}</b>\n\n"
             "👚 Напишіть, будь ласка, які речі потрібно передати в роботу.\n"
             "Наприклад: <b>2 сорочки, джинси та куртка</b>.\n\n"
             "Якщо передумали, натисніть 🏠 Головне меню.",
@@ -2622,7 +2604,7 @@ async def confirm_order(message: Message, state: FSMContext):
     time_text = user_data.get("time", "Невідомо")
     photo_file_id = user_data.get("photo", "")
 
-    date = datetime.now().strftime("%d.%m.%Y")
+    date = datetime.now().strftime("%Y-%m-%d")
     order_number = generate_order_number()
 
     name = message.from_user.full_name
@@ -2671,10 +2653,11 @@ async def confirm_order(message: Message, state: FSMContext):
                 order_amount,
                 photo_file_id,
                 order_number,
-                "",
+                "Очікує",  # N — Останній повідомлений статус: клієнт уже бачив підтвердження
                 recognized_table_text,
                 str(message.from_user.id),
-            ]
+            ],
+            value_input_option="RAW",
         )
 
     except Exception as e:
@@ -2710,11 +2693,11 @@ async def confirm_order(message: Message, state: FSMContext):
             admin_text = (
                 f"🆕 <b>Нове замовлення!</b>\n\n"
                 f"🆔 {order_number}\n"
-                f"👤 {name}\n"
+                f"👤 {esc(name)}\n"
                 f"📞 {phone}\n"
-                f"🏢 Квартира: {apartment}\n"
-                f"👚 Речі: {items}\n"
-                f"🕓 Час: {time_text}\n"
+                f"🏢 Квартира: {esc(apartment)}\n"
+                f"👚 Речі: {esc(items)}\n"
+                f"🕓 Час: {esc(time_text)}\n"
                 f"💰 Орієнтовна сума: {order_amount} грн"
                 f"{discount_line}"
                 f"{recognized_text}"
@@ -2734,9 +2717,9 @@ async def confirm_order(message: Message, state: FSMContext):
     await message.answer(
         "✅ <b>Замовлення прийнято</b>\n\n"
         f"🆔 Номер замовлення: <b>{order_number}</b>\n"
-        f"🏢 Квартира: <b>{apartment}</b>\n"
-        f"👚 Речі: <b>{items}</b>\n"
-        f"🕓 Час забору: <b>{time_text}</b>\n"
+        f"🏢 Квартира: <b>{esc(apartment)}</b>\n"
+        f"👚 Речі: <b>{esc(items)}</b>\n"
+        f"🕓 Час забору: <b>{esc(time_text)}</b>\n"
         f"{amount_text}"
         f"{recognized_text}\n\n"
         "Адміністратор перегляне замовлення, за потреби уточнить деталі "
@@ -2760,7 +2743,7 @@ async def confirm_order_auto_phone(message: Message, state: FSMContext):
     photo_file_id = user_data.get("photo", "")  # Вытягиваем по правильному ключу
 
     name = message.from_user.full_name
-    date = datetime.now().strftime("%d.%m.%Y")
+    date = datetime.now().strftime("%Y-%m-%d")
 
     subscription_status = ""  # підписку прибрано, колонку «Підписка» лишаємо порожньою
     order_number = generate_order_number()
@@ -2794,18 +2777,18 @@ async def confirm_order_auto_phone(message: Message, state: FSMContext):
         time_text,  # 5: Час
         "",  # 6: Скасування
         subscription_status,  # 7: Підписка
-        "Очікує",  # 8: Статус
-        "",  # 9: Повідомлено
-        order_amount,  # 10: Сума
-        photo_file_id,  # 11: Фото
-        order_number,
-        "",  # 12: Номер замовлення
-        recognized_table_text,  # 13: Розпізнано
-        str(message.from_user.id),  # 14: telegram_id
+        "Очікує",  # I: Статус
+        "",  # J: Повідомлено
+        order_amount,  # K: Сума
+        photo_file_id,  # L: Фото
+        order_number,  # M: Номер замовлення
+        "Очікує",  # N: Останній повідомлений статус — клієнт уже бачив підтвердження
+        recognized_table_text,  # O: Розпізнано
+        str(message.from_user.id),  # P: telegram_id
     ]
 
     try:
-        sheet.append_row(row_data, value_input_option="USER_ENTERED")
+        sheet.append_row(row_data, value_input_option="RAW")
     except Exception as e:
         print(f"❌ Помилка запису в таблицю: {e}")
         logging.error("Помилка запису в таблицю", exc_info=True)
@@ -2837,9 +2820,9 @@ async def confirm_order_auto_phone(message: Message, state: FSMContext):
     await message.answer(
         "✅ <b>Замовлення прийнято</b>\n\n"
         f"🆔 Номер замовлення: <b>{order_number}</b>\n"
-        f"🏢 Квартира: <b>{apartment}</b>\n"
-        f"👚 Речі: <b>{items}</b>\n"
-        f"🕓 Час забору: <b>{time_text}</b>\n"
+        f"🏢 Квартира: <b>{esc(apartment)}</b>\n"
+        f"👚 Речі: <b>{esc(items)}</b>\n"
+        f"🕓 Час забору: <b>{esc(time_text)}</b>\n"
         f"{amount_text}"
         f"{recognized_text}\n\n"
         "Адміністратор перегляне замовлення, за потреби уточнить деталі "
@@ -2852,11 +2835,11 @@ async def confirm_order_auto_phone(message: Message, state: FSMContext):
             admin_text = (
                 f"🆕 <b>Нове замовлення!</b>\n\n"
                 f"🆔 {order_number}\n"
-                f"👤 {name}\n"
+                f"👤 {esc(name)}\n"
                 f"📞 {phone}\n"
-                f"🏢 Квартира: {apartment}\n"
-                f"👚 Речі: {items}\n"
-                f"🕓 Час: {time_text}\n"
+                f"🏢 Квартира: {esc(apartment)}\n"
+                f"👚 Речі: {esc(items)}\n"
+                f"🕓 Час: {esc(time_text)}\n"
                 f"💰 Орієнтовна сума: {order_amount} грн"
                 f"{discount_line}"
                 f"{recognized_text}"
@@ -3273,10 +3256,10 @@ async def active_order_from_account(message: Message, state: FSMContext):
                 f"📍 <b>Активне замовлення</b>\n\n"
                 f"🆔 <b>{order_number}</b>\n"
                 f"📅 {date}\n"
-                f"🏢 Квартира: <b>{apartment}</b>\n\n"
-                f"👚 Речі:\n{items}\n\n"
+                f"🏢 Квартира: <b>{esc(apartment)}</b>\n\n"
+                f"👚 Речі:\n{esc(items)}\n\n"
                 f"🔎 Розпізнано:\n{recognized}\n\n"
-                f"🕓 Час: <b>{time_text}</b>\n"
+                f"🕓 Час: <b>{esc(time_text)}</b>\n"
                 f"📦 Статус: <b>{status}</b>\n"
                 f"💰 Сума: <b>{amount} грн</b>\n\n"
                 "──────────────\n\n"
@@ -3360,7 +3343,7 @@ async def user_orders(message: Message, state: FSMContext):
             )
 
         # 🧾 Історія
-        response += f"🧾 <b>Історія замовлень для {name}:</b>\n\n"
+        response += f"🧾 <b>Історія замовлень для {esc(name)}:</b>\n\n"
 
         for i, order in enumerate(last_orders[:5], start=1):
             recognized = (
@@ -3623,8 +3606,8 @@ async def personal_account(message: Message, state: FSMContext):
 
     text = (
         "👤 <b>Особистий кабінет</b>\n\n"
-        f"👋 Ім’я: <b>{name}</b>\n"
-        f"🏢 Квартира: <b>{apartment}</b>\n"
+        f"👋 Ім’я: <b>{esc(name)}</b>\n"
+        f"🏢 Квартира: <b>{esc(apartment)}</b>\n"
         f"📞 Телефон: <b>{phone or '—'}</b>\n"
         f"💎 Знижка Pralnya Club: <b>{club_text}</b>\n\n"
         f"📦 Активних замовлень: <b>{len(active_orders)}</b>\n"
