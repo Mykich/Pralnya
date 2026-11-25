@@ -1246,7 +1246,6 @@ async def show_analytics(message: Message):
         total_sum = 0
         zero_amount_orders = 0
         paid_orders = 0
-        active_subscriptions = 0
         unrecognized_orders = 0
         unrecognized_examples = []
 
@@ -1281,7 +1280,6 @@ async def show_analytics(message: Message):
             status = row[status_index].strip()
             canceled = row[cancel_index].strip()
             amount = parse_amount(row[amount_index])
-            subscription = row[subscription_index].strip()
             recognized = row[recognized_index].strip()
             date = row[date_index].strip()
             order_number = row[order_number_index].strip()
@@ -1309,9 +1307,6 @@ async def show_analytics(message: Message):
                             "items": items or "—",
                         }
                     )
-
-            if subscription == "Так":
-                active_subscriptions += 1
 
             if name and apartment:
                 user_counter[f"{name} (кв. {apartment})"] += 1
