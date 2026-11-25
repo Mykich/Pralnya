@@ -3,3 +3,5 @@
 venv/
 __pycache__/
 .DS_Store
+# запасна копія прайсу — має бути в репозиторії
+!prices_fallback.json
