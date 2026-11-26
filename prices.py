@@ -139,7 +139,7 @@ def delivery_text() -> str:
     if d.get("min_order_outside"):
         tail.append(f"Мінімальне замовлення з доставкою за межі ЖК — {d['min_order_outside']} грн.")
     if d.get("turnaround"):
-        tail.append(f"Повертаємо чисті речі протягом {d['turnaround']}.")
+        tail.append(f"Стандартний термін виконання: {d['turnaround']}.")
     return "\n".join(rows) + ("\n\n" + "\n".join(tail) if tail else "")
 
 
