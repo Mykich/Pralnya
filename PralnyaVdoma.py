@@ -29,6 +29,7 @@ from aiogram.types import ReplyKeyboardRemove
 from datetime import datetime, timedelta
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from collections import Counter
+import intake
 app = FastAPI()
 
 
@@ -489,6 +490,7 @@ admin_kb = ReplyKeyboardMarkup(
             KeyboardButton(text="📸 Фото замовлення"),
             KeyboardButton(text="✏️ Змінити статус замовлення"),
         ],
+        [KeyboardButton(text="📥 Приймання"), KeyboardButton(text="🧾 Квитанція")],
         [KeyboardButton(text="📣 Розсилка"), KeyboardButton(text="📢 Новини")],
         [KeyboardButton(text="⚙️ Налаштування")],
         [KeyboardButton(text="🔙 Назад")],
@@ -1215,6 +1217,22 @@ async def show_analytics(message: Message):
 async def back_to_admin_menu(message: Message, state: FSMContext):
     await state.clear()  # <<< ОБЯЗАТЕЛЬНО
     await message.answer("🔧 Повернення до адмін-меню:", reply_markup=admin_kb)
+
+
+# Приймання речей на стійці і квитанція (intake.py). Реєструється тут, після «Назад до адмін-меню»
+# (щоб ця кнопка виводила з приймання) і до загального chat_with_gemini (він перехоплює весь текст).
+intake.register(
+    dp,
+    spreadsheet,
+    bot,
+    ADMIN_IDS,
+    admin_kb,
+    recognize_items=lambda text: analyze_order_items(text),
+    club_percent_for=lambda tg, phone, exclude: get_club_discount_percent(
+        max(0.0, get_client_total_spent(tg, phone) - exclude)
+    ),
+    esc=esc,
+)
 
 
 @dp.message(F.text == "📣 Розсилка")
