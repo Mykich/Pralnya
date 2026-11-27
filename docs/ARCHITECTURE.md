@@ -1,6 +1,6 @@
 # ARCHITECTURE — Пральня Вдома
 
-_Обновлено: 2026-11-25. Составлено по коду веток `main`; настройки Render не проверялись._
+_Обновлено: 2026-11-27 (ИИ-ассистент v1). Ранее: 2026-11-25. Составлено по коду веток `main`; настройки Render не проверялись._
 
 ## Схема
 
@@ -8,12 +8,12 @@ _Обновлено: 2026-11-25. Составлено по коду веток `
 Клиент ──► Сайт (GitHub Pages, pralnyavdoma) ──ссылки t.me/CleanHomeKyivBot?start=order|atelier|b2b──┐
                                                                                                       ▼
 Клиент ──► Telegram-бот (Render, Pralnya/PralnyaVdoma.py, aiogram 3 + polling) ──gspread──► Google Sheet «Pralnya»
-             │  ИИ: Gemini 2.5 Flash                                                           ▲
+             │  ИИ: вопросы → POST /api/ai/bot (ассистент в API)                               ▲
              │  фоновые задачи: статусы (5 мин), ателье/B2B статусы, winback (24 ч)            │
              └─ FastAPI «/» только для пинга аптайм-ботом                                       │
                                                                                                │
 Клиент ──► Mini App (GitHub Pages, mini/frontend) ──fetch──► API (Render, mini/api.py, FastAPI) ─┘
-                                                              ИИ: OpenAI gpt-3.5-turbo
+                                                              ИИ-ассистент: assistant/brain.py (Gemini) — один для бота и Mini App
                                                               уведомления клиенту и админу через Bot API
 ```
 
@@ -23,14 +23,15 @@ _Обновлено: 2026-11-25. Составлено по коду веток `
 - Один файл `PralnyaVdoma.py` (~3 900 строк): меню, FSM-сценарии (MemoryStorage, состояние теряется при рестарте), админка (`ADMIN_IDS` в коде), рассылки, новости.
 - Цены: словарь `PRICE_LIST` + `ITEM_ALIASES`, тексты прайса захардкожены в хендлерах.
 - Таблица: сервис-аккаунт из файла `pralnya-feee1a9984bf.json` (в `.gitignore`, в репозиторий не попадает), открывает таблицу по имени «Pralnya».
-- Переменные окружения: `TELEGRAM_TOKEN`, `GEMINI_API_KEY`, `PORT`.
+- Переменные окружения: `TELEGRAM_TOKEN`, `PORT`, необязательная `AI_URL` (по умолчанию `https://mini-mrip.onrender.com/api/ai/bot`). `GEMINI_API_KEY` боту больше не нужен.
 - `watcher.py` (локальный перезапуск), `check.py` (список моделей Gemini) — вспомогательные.
 - `bot_errors.log` закоммичен в репозиторий (не должен).
 
 ### API — `Mykich/mini/api.py`
-- Эндпоинты: `GET/POST /api/cabinet`, `POST /api/order` (+ `/api/orders`, `/api/order/`), `POST /api/b2b`, `POST /api/ai`.
+- Эндпоинты: `GET/POST /api/cabinet`, `POST /api/order` (+ `/api/orders`, `/api/order/`), `POST /api/b2b`, `POST /api/ai` (Mini App, подпись initData), `POST /api/ai/bot` (бот, заголовок `X-Bot-Signature` = HMAC-SHA256 от TELEGRAM_TOKEN).
 - Сервис-аккаунт из `credentials.json`; таблица по имени.
-- Переменные окружения: `TELEGRAM_TOKEN`, `ADMIN_CHAT_ID`, `OPENAI_API_KEY`, `PORT`.
+- Переменные окружения: `TELEGRAM_TOKEN`, `ADMIN_CHAT_ID`, `GEMINI_API_KEY`, `PORT`; необязательные `GEMINI_MODEL` (по умолч. gemini-2.5-flash), `AI_USER_HOURLY` (20), `AI_USER_DAILY` (60), `AI_GLOBAL_DAILY` (1500). `OPENAI_API_KEY` больше не нужен.
+- **ИИ-ассистент** (`assistant/`): база знаний `assistant/knowledge/*.md` (о компании, график, условия, политика повреждений) + `catalog/prices.json` (прайс, доставка, Club, «только после осмотра») целиком в системном промпте; модель Gemini через `google-genai`; лимиты сообщений; ответ — обычный текст без Markdown. Чтобы ассистент «узнал» новое — правим эти файлы.
 - Скидка Pralnya Club: 5% от 2 000 ₴, 10% от 5 000 ₴ трат.
 
 ### Mini App — `Mykich/mini/frontend`
