@@ -275,7 +275,7 @@ AI_FALLBACK = (
 )
 
 
-async def ask_assistant(text: str, telegram_id) -> str | None:
+async def ask_assistant(text: str, telegram_id, name: str = "", username: str = "") -> str | None:
     """Питає асистента в API. Повертає текст відповіді або None, якщо API недоступний."""
     signature = hmac.new(
         (TELEGRAM_TOKEN or "").encode(), b"pralnya-ai-bot", hashlib.sha256
@@ -285,7 +285,7 @@ async def ask_assistant(text: str, telegram_id) -> str | None:
         async with aiohttp.ClientSession(timeout=timeout) as session:
             async with session.post(
                 AI_URL,
-                json={"message": text, "telegram_id": telegram_id},
+                json={"message": text, "telegram_id": telegram_id, "name": name, "username": username},
                 headers={"X-Bot-Signature": signature},
             ) as resp:
                 if resp.status != 200:
@@ -2814,6 +2814,9 @@ async def forward_user_message(message: Message, state: FSMContext):
 
 @dp.message(F.text.startswith("/reply_"))
 async def reply_to_user_command(message: Message, state: FSMContext):
+    # Лише адміністратор може писати клієнтам від імені бота
+    if message.from_user.id not in ADMIN_IDS:
+        return
     parts = message.text.split("_")
     if len(parts) != 2:
         await message.answer("❌ Невірна команда.")
@@ -3373,7 +3376,8 @@ async def chat_with_assistant(message: Message, state: FSMContext):
     try:
         # Показуємо статус "друкує...", поки асистент думає
         await bot.send_chat_action(chat_id=message.chat.id, action="typing")
-        answer = await ask_assistant(message.text, message.from_user.id)
+        user = message.from_user
+        answer = await ask_assistant(message.text, user.id, user.full_name or "", user.username or "")
         # Відповідь — звичайний текст; екрануємо, бо бот надсилає з parse_mode=HTML
         # (раніше символи < > & ламали відправку, а Markdown показувався як **)
         await message.answer(esc(answer) if answer else AI_FALLBACK)
