@@ -2,7 +2,9 @@ import asyncio
 import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-import google.generativeai as genai
+import hashlib
+import hmac
+import aiohttp
 import logging
 import traceback
 import html
@@ -262,152 +264,39 @@ class ViewOrderPhoto(StatesGroup):
 load_dotenv()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 
-# --- Налаштування Gemini (ШІ) ---
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-genai.configure(api_key=GEMINI_API_KEY)
-
-system_instruction = """
-Ти — професійний консультант преміальної пральні та ательє «Pralnya Vdoma», що працює в елітному житловому комплексі в Києві.
-
-========================
-РОЛЬ
-========================
-Ти представляєш компанію Pralnya Vdoma та спілкуєшся з клієнтами від її імені.
-Твоя головна мета — допомогти клієнту отримати потрібну послугу швидко, зрозуміло та комфортно.
-
-========================
-СТИЛЬ СПІЛКУВАННЯ
-========================
-• Завжди звертайся до клієнта на «Ви».
-• Будь ввічливим, доброзичливим і професійним.
-• Відповідай українською мовою.
-• Пиши коротко, зрозуміло та по суті.
-• Не використовуй канцеляризмів і складних формулювань.
-• Якщо відповідь можна дати двома реченнями — не пиши десять.
-
-========================
-ПОСЛУГИ
-========================
-Pralnya Vdoma надає:
-• професійне прання;
-• делікатну аквачистку;
-• прасування;
-• догляд за постільною білизною;
-• професійне ательє (ремонт, реставрація, підгонка одягу);
-• доставку речей (за наявності цієї послуги).
-
-Основні переваги:
-• професійне обладнання;
-• безпечна якісна хімія;
-• уважне ставлення до речей;
-• власне ательє.
-
-========================
-ПРАВИЛА ВІДПОВІДЕЙ
-========================
-• Відповідай лише на питання, пов'язані з Pralnya Vdoma.
-• Якщо інформація відсутня або невідома — чесно повідом про це.
-• Ніколи не вигадуй ціни, строки або умови.
-• Якщо клієнт питає про вартість — запропонуй переглянути розділ «Прайс».
-• Якщо клієнт хоче оформити замовлення — запропонуй скористатися кнопкою «Здати речі».
-
-========================
-ПІДТРИМКА ПРОДАЖУ
-========================
-Після відповіді, якщо це доречно, запропонуй наступний крок:
-• оформити замовлення;
-• переглянути прайс;
-• скористатися послугами ательє;
-• поставити додаткові питання.
-
-Не будь нав'язливим. Якщо клієнт просто запитує інформацію — не тисни на нього.
-
-========================
-ОБМЕЖЕННЯ
-========================
-Не відповідай на питання, які не стосуються діяльності Pralnya Vdoma.
-Не обговорюй політику, релігію чи інші сторонні теми.
-Не виконуй роль універсального чат-бота.
-
-========================
-ФОРМАТ ВІДПОВІДІ
-========================
-Відповідай природно, як досвідчений адміністратор преміального сервісу.
-Мета кожної відповіді — допомогти клієнту, створити довіру та, якщо доречно, підвести його до оформлення замовлення.
-"""
-gemini_model = genai.GenerativeModel(
-    model_name="gemini-2.5-flash",
-    system_instruction=system_instruction,
+# --- AI-консультант ---
+# Сам асистент живе в API (репозиторій mini, assistant/brain.py): одна база знань і одна модель
+# для бота і Mini App. Бот лише пересилає туди вільні запитання клієнтів.
+# Запит підписується TELEGRAM_TOKEN-ом (API знає той самий токен), окремий секрет не потрібен.
+AI_URL = os.getenv("AI_URL", "https://mini-mrip.onrender.com/api/ai/bot")
+AI_FALLBACK = (
+    "Перепрошую, зараз не вдається відповісти. Скористайтеся, будь ласка, меню "
+    "або натисніть «Зв’язатися з нами» — адміністратор допоможе."
 )
 
 
-# ===== Gemini Service Start=====
-async def generate_gemini_response(
-    prompt: str,
-    retries: int = 2,
-    timeout: int = 20,
-) -> str | None:
-    """
-    Безопасный вызов Gemini.
-
-    - не блокирует Event Loop;
-    - ограничивает время ожидания;
-    - повторяет временные ошибки;
-    - проверяет пустой ответ.
-    """
-
-    for attempt in range(retries + 1):
-
-        try:
-            response = await asyncio.wait_for(
-                asyncio.to_thread(gemini_model.generate_content, prompt),
-                timeout=timeout,
-            )
-
-            if response is None:
-                raise ValueError("Gemini returned None")
-
-            text = getattr(response, "text", None)
-
-            if not text or not text.strip():
-                raise ValueError("Gemini returned empty response")
-
-            return text.strip()
-
-        except asyncio.TimeoutError:
-
-            logging.warning(
-                "Gemini timeout (%s/%s)",
-                attempt + 1,
-                retries + 1,
-            )
-
-        except Exception as e:
-
-            error_name = type(e).__name__
-            error_text = str(e)
-
-            logging.warning(
-                "Gemini error (%s/%s): %s | %s",
-                attempt + 1,
-                retries + 1,
-                error_name,
-                error_text,
-            )
-            logging.exception("Gemini full traceback")
-
-            # Если это ошибка конфигурации —
-            # повторять бессмысленно
-            if "401" in error_text or "403" in error_text:
-                break
-
-        if attempt < retries:
-            await asyncio.sleep(2)
-
-    return None
-
-
-# ===== Gemini Service End =====
+async def ask_assistant(text: str, telegram_id) -> str | None:
+    """Питає асистента в API. Повертає текст відповіді або None, якщо API недоступний."""
+    signature = hmac.new(
+        (TELEGRAM_TOKEN or "").encode(), b"pralnya-ai-bot", hashlib.sha256
+    ).hexdigest()
+    try:
+        timeout = aiohttp.ClientTimeout(total=60)  # з запасом на «пробудження» Render
+        async with aiohttp.ClientSession(timeout=timeout) as session:
+            async with session.post(
+                AI_URL,
+                json={"message": text, "telegram_id": telegram_id},
+                headers={"X-Bot-Signature": signature},
+            ) as resp:
+                if resp.status != 200:
+                    logging.warning("AI API відповів %s: %s", resp.status, (await resp.text())[:300])
+                    return None
+                data = await resp.json(content_type=None)
+                reply = (data or {}).get("reply")
+                return reply.strip() if isinstance(reply, str) and reply.strip() else None
+    except Exception as e:
+        logging.warning("AI API недоступний: %s: %s", type(e).__name__, e)
+        return None
 
 scope = [
     "https://spreadsheets.google.com/feeds",
@@ -3463,7 +3352,7 @@ async def send_news(message: Message, state: FSMContext):
 
 
 @dp.message(F.text)
-async def chat_with_gemini(message: Message, state: FSMContext):
+async def chat_with_assistant(message: Message, state: FSMContext):
     # Перевіряємо, чи не знаходиться клієнт зараз у процесі оформлення замовлення
     current_state = await state.get_state()
     if current_state is not None:
@@ -3473,7 +3362,7 @@ async def chat_with_gemini(message: Message, state: FSMContext):
     if message.text.startswith("/"):
         return
 
-    # Захист: кнопки меню не відправляємо в Gemini
+    # Захист: кнопки меню не відправляємо асистенту
     if message.text in MENU_BUTTONS:
         await message.answer(
             "Будь ласка, скористайтесь кнопками меню 👇",
@@ -3482,25 +3371,15 @@ async def chat_with_gemini(message: Message, state: FSMContext):
         return
 
     try:
-        # Показуємо статус "друкує...", поки ШІ думає
+        # Показуємо статус "друкує...", поки асистент думає
         await bot.send_chat_action(chat_id=message.chat.id, action="typing")
-
-        answer = await generate_gemini_response(message.text)
-
-        if answer:
-            await message.answer(answer)
-        else:
-            await message.answer(
-                "Перепрошую, сервіс зараз тимчасово недоступний. "
-                "Спробуйте ще раз трохи пізніше."
-            )
-
-    except Exception as e:
-        print(f"❌ Помилка Gemini: {e}")
-        logging.error("Помилка Gemini", exc_info=True)
-        await message.answer(
-            "Перепрошую, зараз я трохи перевантажений. Скористайтеся меню або зверніться до адміністратора."
-        )
+        answer = await ask_assistant(message.text, message.from_user.id)
+        # Відповідь — звичайний текст; екрануємо, бо бот надсилає з parse_mode=HTML
+        # (раніше символи < > & ламали відправку, а Markdown показувався як **)
+        await message.answer(esc(answer) if answer else AI_FALLBACK)
+    except Exception:
+        logging.error("Помилка AI-консультанта", exc_info=True)
+        await message.answer(AI_FALLBACK)
 
 
 async def send_winback_messages():
