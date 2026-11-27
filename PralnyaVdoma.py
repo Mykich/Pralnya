@@ -275,8 +275,8 @@ AI_FALLBACK = (
 )
 
 
-async def ask_assistant(text: str, telegram_id, name: str = "", username: str = "") -> str | None:
-    """Питає асистента в API. Повертає текст відповіді або None, якщо API недоступний."""
+async def ask_assistant(text: str, telegram_id, name: str = "", username: str = "") -> tuple:
+    """Питає асистента в API. Повертає (текст, кнопки) або (None, []), якщо API недоступний."""
     signature = hmac.new(
         (TELEGRAM_TOKEN or "").encode(), b"pralnya-ai-bot", hashlib.sha256
     ).hexdigest()
@@ -290,13 +290,33 @@ async def ask_assistant(text: str, telegram_id, name: str = "", username: str = 
             ) as resp:
                 if resp.status != 200:
                     logging.warning("AI API відповів %s: %s", resp.status, (await resp.text())[:300])
-                    return None
-                data = await resp.json(content_type=None)
-                reply = (data or {}).get("reply")
-                return reply.strip() if isinstance(reply, str) and reply.strip() else None
+                    return None, []
+                data = await resp.json(content_type=None) or {}
+                reply = data.get("reply")
+                actions = [a for a in (data.get("actions") or []) if a in AI_BUTTONS][:2]
+                if isinstance(reply, str) and reply.strip():
+                    return reply.strip(), actions
+                return None, []
     except Exception as e:
         logging.warning("AI API недоступний: %s: %s", type(e).__name__, e)
+        return None, []
+
+
+# Кнопки під відповіддю асистента: ключ з API -> (підпис, текст кнопки меню, яку вона «натискає»)
+AI_BUTTONS = {
+    "order": ("🧺 Здати речі", "Здати речі"),
+    "price": ("📋 Прайс", "Прайс"),
+    "atelier": ("🧵 Заявка в ательє", "🧵 Заявка в ательє"),
+    "contact": ("✉️ Написати адміністратору", "Зв’язатися з нами"),
+}
+
+
+def ai_buttons_kb(actions):
+    if not actions:
         return None
+    return InlineKeyboardMarkup(inline_keyboard=[[
+        InlineKeyboardButton(text=AI_BUTTONS[a][0], callback_data=f"ai:{a}") for a in actions
+    ]])
 
 scope = [
     "https://spreadsheets.google.com/feeds",
@@ -3377,13 +3397,39 @@ async def chat_with_assistant(message: Message, state: FSMContext):
         # Показуємо статус "друкує...", поки асистент думає
         await bot.send_chat_action(chat_id=message.chat.id, action="typing")
         user = message.from_user
-        answer = await ask_assistant(message.text, user.id, user.full_name or "", user.username or "")
+        answer, actions = await ask_assistant(message.text, user.id, user.full_name or "", user.username or "")
         # Відповідь — звичайний текст; екрануємо, бо бот надсилає з parse_mode=HTML
         # (раніше символи < > & ламали відправку, а Markdown показувався як **)
-        await message.answer(esc(answer) if answer else AI_FALLBACK)
+        if answer:
+            await message.answer(esc(answer), reply_markup=ai_buttons_kb(actions))
+        else:
+            await message.answer(AI_FALLBACK)
     except Exception:
         logging.error("Помилка AI-консультанта", exc_info=True)
         await message.answer(AI_FALLBACK)
+
+
+@dp.callback_query(F.data.startswith("ai:"))
+async def ai_button_pressed(callback: CallbackQuery, state: FSMContext):
+    """Кнопка під відповіддю асистента працює так само, як відповідна кнопка меню."""
+    key = callback.data.split(":", 1)[1]
+    handlers = {
+        "order": start_order,
+        "price": open_price_menu,
+        "atelier": start_atelier_from_menu,
+        "contact": contact_info,
+    }
+    handler = handlers.get(key)
+    await callback.answer()
+    if not handler or not callback.message:
+        return
+    try:
+        await callback.message.edit_reply_markup(reply_markup=None)  # кнопки одноразові
+    except Exception:
+        pass
+    # Обробники меню чекають повідомлення від клієнта — підставляємо клієнта й текст кнопки меню
+    fake = callback.message.model_copy(update={"from_user": callback.from_user, "text": AI_BUTTONS[key][1]})
+    await handler(fake, state)
 
 
 async def send_winback_messages():
